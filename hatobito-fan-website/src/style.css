@@ -9,6 +9,7 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -17,16 +18,14 @@
 }
 
 body {
-  margin: 0;
   display: flex;
-  min-width: 320px;
-  min-height: 100vh;
+  justify-content: center; /* ตรงกลางแนวนอน */
+  align-items: start;      /* เริ่มด้านบนแนวตั้ง */
 }
 
-
 #app {
+  width: 100%;
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
   text-align: center;
 }

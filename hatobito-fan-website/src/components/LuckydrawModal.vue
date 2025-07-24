@@ -16,7 +16,7 @@
           <!-- Row 1: จากบัตรเข้างาน -->
           <tr>
             <td>
-              <select v-model="selectedTicket">
+              <select v-model="selectedTicket" @change="(e) => e.target.blur()">
                 <option disabled value="">- เลือกรายการบัตร -</option>
                 <option v-for="ticket in tickets" :key="ticket.name" :value="ticket.name">
                   {{ ticket.name }}
@@ -216,5 +216,12 @@ th {
 
 h2 {
   color: #098ba2;
+}
+
+@media screen and (max-width: 768px) {
+  .modal-content {
+    min-width: 300px;
+    max-width: 90%;
+  }
 }
 </style>
