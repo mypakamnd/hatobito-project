@@ -16,7 +16,7 @@
       <tbody>
         <tr v-for="(item, index) in orders" :key="index" class="border-t border-sky-600">
           <td class="px-2 py-2">
-            <select v-model="item.product" class="w-full rounded px-2 py-1">
+            <select v-model="item.product" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1">
               <option disabled value="">เลือกสินค้า</option>
               <option v-for="product in products" :key="product.name" :value="product.name">
                 {{ product.name }}
