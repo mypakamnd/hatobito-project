@@ -56,7 +56,10 @@
                 <div class="member" v-for="member in filteredSchedule[booth][slot]" :key="member">
                   <label style="display: flex; align-items: center; gap: 4px">
                     {{ member }}
-                    <input v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'" type="number" min="0" v-model.number="inputValues[booth][slot][member]" />
+                    <button class="plus-and-minus" @click="decreaseValue(booth, slot, member)">−</button>
+                    <input type="number" :min="0" step="50" v-model.number="inputValues[booth][slot][member]" @input="validateValue(booth, slot, member)" />
+                    <button class="plus-and-minus" @click="increaseValue(booth, slot, member)">+</button>
+
                     <span v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'">บาท</span>
                   </label>
                 </div>
@@ -205,6 +208,25 @@ function saveAndCloseModal() {
 }
 function clearSelection() {
   tempSelectedMembers.value = [];
+}
+function increaseValue(booth, slot, member) {
+  inputValues[booth][slot][member] += 50;
+}
+
+function decreaseValue(booth, slot, member) {
+  const current = inputValues[booth][slot][member];
+  if (current >= 50) inputValues[booth][slot][member] -= 50;
+}
+
+function validateValue(booth, slot, member) {
+  let value = inputValues[booth][slot][member];
+  // ถ้าเป็น NaN หรือ < 0 ให้รีเซ็ตเป็น 0
+  if (isNaN(value) || value < 0) {
+    inputValues[booth][slot][member] = 0;
+  } else {
+    // ปัดเศษให้ลงตัวกับ 50 (optional)
+    inputValues[booth][slot][member] = Math.round(value / 50) * 50;
+  }
 }
 
 // filter schedule follow tempSelectedMembers
@@ -431,6 +453,11 @@ input {
   text-align: center;
   width: 60px;
   font-weight: 600;
+  text-align: center;
+}
+
+.plus-and-minus {
+  color: #e9a5f1;
 }
 
 label {
