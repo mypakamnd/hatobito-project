@@ -31,7 +31,7 @@
           </li>
         </ul>
         <div class="btn-group">
-          <button @click="saveAndCloseModal" class="btn-click">บันทึก</button>
+          <button @click="saveAndCloseModal" class="save-btn">บันทึก</button>
           <button @click="clearSelection" class="btn-clear">ล้างทั้งหมด</button>
         </div>
       </div>
@@ -376,6 +376,22 @@ td {
 }
 
 .btn-click:hover {
+  color: #f0faff;
+  background-color: #4ed7f1;
+}
+
+.save-btn {
+  color: #4ed7f1;
+  background-color: #fffbb2;
+  padding: 10px 20px;
+  margin-right: 10px;
+  font-weight: 600;
+  border-radius: 5px;
+  margin: 5px 10px 20px 0px;
+  border: #4ed7f1 2px solid;
+}
+
+.save-btn:hover {
   color: #f0faff;
   background-color: #4ed7f1;
 }
