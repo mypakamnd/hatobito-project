@@ -47,38 +47,46 @@
 import { defineProps, defineEmits, computed, ref } from "vue";
 import { watch, onMounted } from "vue";
 
-// ✅ ต้องประกาศก่อนใช้งาน
+const tickets = [
+  { name: "Normal Ticket", luckyPerTicket: 0 },
+  { name: "Koiiro Ticket", luckyPerTicket: 2 },
+  { name: "S Ticket", luckyPerTicket: 3 },
+  { name: "SS Ticket", luckyPerTicket: 5 },
+];
+
 const selectedTicket = ref("");
 const ticketCount = ref(0);
 
-// ดึงจาก localStorage ตอนเริ่ม
+const selectedTicketObj = computed(() => tickets.find((t) => t.name === selectedTicket.value));
+
+watch(
+  [selectedTicketObj, ticketCount],
+  ([ticket, count]) => {
+    if (ticket) {
+      localStorage.setItem(
+        "luckyDrawTicket",
+        JSON.stringify({
+          ticketName: ticket.name,
+          ticketCount: count,
+        })
+      );
+    }
+  },
+  { immediate: true }
+);
+
 onMounted(() => {
   const saved = localStorage.getItem("luckyDrawTicket");
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      selectedTicket.value = parsed.selectedTicket || "";
+      selectedTicket.value = parsed.ticketName || "";
       ticketCount.value = parsed.ticketCount || 0;
     } catch (e) {
-      console.error("ไม่สามารถแปลง JSON จาก localStorage ได้:", e);
+      console.error("❌ ไม่สามารถแปลง JSON จาก localStorage ได้:", e);
     }
   }
 });
-
-// บันทึกลง localStorage ทุกครั้งที่เปลี่ยน
-watch(
-  [selectedTicket, ticketCount],
-  ([newTicket, newCount]) => {
-    localStorage.setItem(
-      "luckyDrawTicket",
-      JSON.stringify({
-        selectedTicket: newTicket,
-        ticketCount: newCount,
-      })
-    );
-  },
-  { immediate: true }
-);
 
 const props = defineProps({
   show: Boolean,
@@ -90,14 +98,6 @@ const emit = defineEmits(["close"]);
 function close() {
   emit("close");
 }
-
-// ข้อมูลบัตรเข้างาน
-const tickets = [
-  { name: "Normal Ticket", luckyPerTicket: 0 },
-  { name: "Koiiro Ticket", luckyPerTicket: 2 },
-  { name: "S Ticket", luckyPerTicket: 3 },
-  { name: "SS Ticket", luckyPerTicket: 5 },
-];
 
 // คำนวณ lucky draw จากบัตรเข้างาน
 const luckyDrawFromTicket = computed(() => {
