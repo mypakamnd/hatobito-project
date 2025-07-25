@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Anuphan", sans-serif;
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: 200;
 
   background-image: url("./assets/koiiro-summer-bg2.JPG");
   background-size: cover;

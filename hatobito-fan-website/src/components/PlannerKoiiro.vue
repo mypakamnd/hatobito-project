@@ -1,57 +1,70 @@
 <template>
   <div class="planner-card">
     <h2 class="text-xl font-bold mb-4">HatoBito Koiiro Summer Booth</h2>
-    <button @click="openModal" class="btn-click">เลือกสมาชิก (Filter ตาราง)</button>
+    <div class="btn-group">
+      <button @click="openModal" class="btn-click flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+          />
+        </svg>
+        เลือกเมมเบอร์
+      </button>
+      <button @click="showSummaryModal = true" class="btn-click">สรุป Summer Coupon</button>
+    </div>
+
+    <TicketSummaryModal v-if="showSummaryModal" :ticketData="inputValues" @close="showSummaryModal = false" />
 
     <!-- Modal select member -->
     <div v-if="showModal" class="modal-overlay" @click.self="saveAndCloseModal">
       <div class="modal-content">
-        <h3 class="select-member-header">เลือกสมาชิก</h3>
-        <ul>
+        <h3 class="select-member-header">เลือกเมมเบอร์</h3>
+        <ul class="checkbox-list">
           <li v-for="member in allMembers" :key="member">
-            <label>
-              <input type="checkbox" class="member-select-input" :checked="tempSelectedMembers.includes(member)" @change="toggleGroup(member)" />
-              {{ member }}
+            <label class="custom-checkbox" :class="{ 'checkbox-active': tempSelectedMembers.includes(member) }">
+              <input type="checkbox" v-model="selected" class="hidden-checkbox" :checked="tempSelectedMembers.includes(member)" @change="toggleGroup(member)" />
+              <span class="checkbox-text">{{ member }}</span>
             </label>
           </li>
         </ul>
         <div class="btn-group">
           <button @click="saveAndCloseModal" class="btn-click">บันทึก</button>
-          <button @click="clearSelection" class="btn-click">ล้างการเลือก</button>
+          <button @click="clearSelection" class="btn-clear">ล้างทั้งหมด</button>
         </div>
       </div>
     </div>
 
     <!-- table filter -->
-    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%">
-      <thead>
-        <tr>
-          <th>Booth / Time</th>
-          <th v-for="slot in timeSlots" :key="slot">{{ slot }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="booth in filteredBooths" :key="booth">
-          <td>
-            <strong>{{ booth }}</strong>
-          </td>
-          <td v-for="slot in timeSlots" :key="slot">
-            <div class="member-list" v-if="filteredSchedule[booth][slot] && filteredSchedule[booth][slot].length">
-              <div class="member" v-for="member in filteredSchedule[booth][slot]" :key="member" style="margin-bottom: 4px">
-                <label style="display: flex; align-items: center; gap: 12px">
-                  {{ member }}
-                  <input v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'" type="number" min="0" v-model.number="inputValues[booth][slot][member]" />
-                </label>
+    <div class="table-wrapper">
+      <table class="responsive-table">
+        <thead>
+          <tr>
+            <th class="sticky-column">Booth / Time</th>
+            <th v-for="slot in timeSlots" :key="slot">{{ slot }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="booth in filteredBooths" :key="booth">
+            <td class="sticky-column">
+              <label>{{ booth }}</label>
+            </td>
+            <td v-for="slot in timeSlots" :key="slot">
+              <div class="member-list" v-if="filteredSchedule[booth][slot] && filteredSchedule[booth][slot].length">
+                <div class="member" v-for="member in filteredSchedule[booth][slot]" :key="member">
+                  <label style="display: flex; align-items: center; gap: 12px">
+                    {{ member }}
+                    <input v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'" type="number" min="0" v-model.number="inputValues[booth][slot][member]" />
+                  </label>
+                </div>
               </div>
-            </div>
-            <span v-else>-</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <button @click="showSummaryModal = true" style="margin-top: 16px" class="btn-click">ดูสรุปตั๋ว</button>
-    <TicketSummaryModal v-if="showSummaryModal" :ticketData="inputValues" @close="showSummaryModal = false" />
+              <span v-else>-</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -284,14 +297,16 @@ function toggleGroup(member) {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10; /* ✅ เพิ่ม z-index ให้มากกว่าตาราง */
 }
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
+  width: 500px;
   max-height: 80vh;
   overflow-y: auto;
+  z-index: 11;
 }
 
 td {
@@ -300,22 +315,41 @@ td {
 }
 
 .btn-click {
-  color: #ffffff;
-  background-color: #098ba2;
+  color: #4ed7f1;
+  background-color: #fffbb2;
   padding: 10px 20px;
   margin-right: 10px;
-  font-weight: bold;
+  font-weight: 600;
   border-radius: 5px;
-  margin: 5px 0px 10px 0px;
+  margin: 5px 10px 20px 0px;
+  border: #4ed7f1 2px solid;
 }
 
 .btn-click:hover {
-  background-color: #65c8da;
+  color: #f0faff;
+  background-color: #4ed7f1;
+}
+
+.btn-clear {
+  color: #4ed7f1;
+  background-color: #ffffff;
+  padding: 10px 20px;
+  margin-right: 10px;
+  font-weight: 600;
+  border-radius: 5px;
+  margin: 5px 10px 20px 0px;
+  border: #4ed7f1 2px solid;
+}
+
+.btn-clear:hover {
+  color: #f0faff;
+  background-color: #f14e4e;
 }
 
 .btn-group {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .planner-card {
@@ -326,58 +360,59 @@ td {
 }
 
 h2 {
-  color: #098ba2;
+  color: #4ed7f1;
+  margin-bottom: 1px;
 }
 
 td {
-  color: #098ba2;
-  border: #098ba2 1px solid;
+  color: #2b8fa3;
+  border: #2b8fa3 2px solid;
+  font-size: 14px;
+  z-index: 1;
+  font-weight: 600;
 }
 
 tr {
-  color: #098ba2;
-  border: #098ba2 1px solid;
+  color: #2b8fa3;
+  border: #2b8fa3 2px solid;
+  font-size: 14px;
 }
 
 th {
-  color: #098ba2;
-  background-color: #9bf0ff;
-  border: #098ba2 1px solid;
-  padding: 6px;
+  color: #2b8fa3;
+  background-color: #e1faff;
+  border: #2b8fa3 2px solid;
+  padding: 4px;
+  font-size: 14px;
+  z-index: 1;
+}
+
+table td:first-child,
+table th:first-child {
+  background-color: #fffbb2;
+  font-weight: bold;
 }
 
 input {
   border: none;
-  color: #ff6bfd;
-  border-bottom: 1px solid #ff6bfd;
+  color: #e9a5f1;
+  border-bottom: 1px solid #e9a5f1;
   outline: none;
   text-align: center;
   width: 60px;
+  font-weight: 600;
 }
-
-/* .member-list {
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  justify-content: center;
-}
-
-.member {
-  display: flex;
-  flex-direction: column;
-  justify-items: center;
-  justify-content: center;
-} */
 
 label {
   flex-direction: row;
   justify-items: center;
   justify-content: center;
+  font-size: 14px;
 }
 
 .select-member-header {
   font-size: 20px;
-  color: #098ba2;
+  color: #4ed7f1;
   font-weight: bold;
   margin-bottom: 1rem;
 }
@@ -386,5 +421,126 @@ label {
   margin-right: 4px;
   cursor: pointer;
   width: 20px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.responsive-table {
+  width: 100%;
+  min-width: 800px;
+  border-collapse: collapse;
+}
+
+.responsive-table th,
+.responsive-table td {
+  border: 1px solid #adf1ff;
+  padding: 8px;
+  text-align: center;
+  vertical-align: top;
+}
+
+.sticky-column {
+  position: sticky;
+  left: 0;
+  background-color: white;
+  z-index: 2;
+}
+
+thead .sticky-column {
+  z-index: 3;
+}
+
+.hidden-checkbox {
+  display: none;
+}
+
+.custom-checkbox {
+  display: inline-flex;
+  align-items: center;
+  margin: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.checkbox-text {
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #4ed7f1;
+  border: #4ed7f1 2px solid;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  width: 120px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.checkbox-active .checkbox-text {
+  background-color: #4ed7f1;
+  color: white;
+}
+
+.checkbox-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 20px;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .planner-card {
+    padding: 15px;
+  }
+
+  .btn-group {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn-click {
+    width: 250px;
+    margin: 0px 0px 10px 0px;
+    justify-content: center;
+  }
+
+  .btn-clear {
+    width: 250px;
+    margin: 0px 0px 10px 0px;
+    justify-content: center;
+  }
+
+  input {
+    width: 50px;
+    font-size: 14px;
+  }
+
+  .responsive-table {
+    font-size: 14px;
+    min-width: 500px;
+  }
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  .modal-content {
+    width: 300px;
+  }
+
+  .checkbox-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 </style>

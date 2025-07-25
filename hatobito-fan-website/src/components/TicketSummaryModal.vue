@@ -1,10 +1,16 @@
-<!-- TicketSummaryModal.vue -->
 <template>
   <div class="modal-overlay" @click.self="$emit('close')">
     <div class="modal-content">
       <h2>Summer Ticket Summary</h2>
-      <ul>
-        <li v-for="[member, total] in filteredMembers" :key="member">{{ member }} : {{ total }} บาท</li>
+      <ul class="summary-table">
+        <li class="summary-header">
+          <span>สมาชิก</span>
+          <span>จำนวนเงิน</span>
+        </li>
+        <li v-for="[member, total] in filteredMembers" :key="member" class="summary-row">
+          <span>{{ member }}</span>
+          <span>{{ total }} บาท</span>
+        </li>
       </ul>
       <button class="btn-click" @click="$emit('close')">close</button>
     </div>
@@ -46,33 +52,61 @@ const filteredMembers = computed(() => Object.entries(memberTotals.value).filter
   justify-content: center;
   align-items: center;
 }
+
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
+  width: 320px;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 h2 {
   color: #098ba2;
   font-weight: bold;
+  margin-bottom: 12px;
+  text-align: center;
 }
 
 .btn-click {
   color: #ffffff;
-  background-color: #098ba2;
+  background-color: #4ed7f1;
   padding: 10px 20px;
-  margin-right: 10px;
   font-weight: bold;
   border-radius: 5px;
-  margin: 5px 0px 10px 0px;
+  margin-top: 15px;
+  width: 100%;
 }
 
 .btn-click:hover {
   background-color: #65c8da;
 }
 
-ul {
-  margin: 10px 0px;
+.summary-table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0;
+  margin: 10px 0;
+  list-style: none;
+}
+
+.summary-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  color: #098ba2;
+  border-bottom: 2px solid #098ba2;
+  padding-bottom: 4px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid #c0f0f7;
+  color: #4ed7f1;
+  font-weight: 500;
 }
 </style>

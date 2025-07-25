@@ -211,6 +211,9 @@ function getGrandTotal() {
 </script>
 
 <style scoped>
+table {
+  width: 100%;
+}
 .koiiro-order-form {
   margin: auto;
   padding: 30px;
@@ -219,36 +222,39 @@ function getGrandTotal() {
 }
 
 td {
-  color: #098ba2;
-  border: #098ba2 1px solid;
+  color: #2b8fa3;
+  border: #2b8fa3 1px solid;
+  font-weight: 600;
 }
 
 tr {
-  color: #098ba2;
-  border: #098ba2 1px solid;
+  color: #2b8fa3;
+  border: #2b8fa3 1px solid;
 }
 
 th {
-  color: #098ba2;
-  background-color: #9bf0ff;
-  border: #098ba2 1px solid;
+  color: #2b8fa3;
+  background-color: #e1faff;
+  border: #2b8fa3 1px solid;
 }
 
 h2 {
-  color: #098ba2;
+  color: #4ed7f1;
 }
 
 .btn-click {
-  color: #ffffff;
-  background-color: #098ba2;
+  color: #4ed7f1;
+  background-color: #fffbb2;
   padding: 10px 20px;
   margin-right: 10px;
   font-weight: bold;
   border-radius: 5px;
+  border: #4ed7f1 2px solid;
 }
 
 .btn-click:hover {
-  background-color: #65c8da;
+  color: #f0faff;
+  background-color: #4ed7f1;
 }
 
 input {
@@ -287,10 +293,10 @@ input {
 
   tr {
     margin-bottom: 1rem;
-    border: 1px solid #098ba2;
+    border: 1px solid #2b8fa3;
     border-radius: 10px;
     padding: 10px;
-    background-color: #f0faff;
+    background-color: #f7feff;
     max-width: 310px;
   }
 
@@ -300,7 +306,7 @@ input {
     padding-right: 10px;
     text-align: center;
     border: none;
-    border-bottom: 1px solid #098ba2;
+    border-bottom: 1px solid #2b8fa3;
   }
 
   td::before {
@@ -311,7 +317,7 @@ input {
     white-space: nowrap;
     content: attr(data-label);
     font-weight: bold;
-    color: #098ba2;
+    color: #2b8fa3;
     text-transform: uppercase;
   }
 
@@ -321,7 +327,7 @@ input {
 
   .koiiro-order-form {
     margin: auto;
-    padding: 20px;
+    padding: 15px 0px 0px 0px;
   }
 
   .btn-click {
