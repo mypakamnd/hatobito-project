@@ -56,9 +56,16 @@
                 <div class="member" v-for="member in filteredSchedule[booth][slot]" :key="member">
                   <label style="display: flex; align-items: center; gap: 4px">
                     {{ member }}
-                    <button class="plus-and-minus" @click="decreaseValue(booth, slot, member)">−</button>
-                    <input type="number" :min="0" step="50" v-model.number="inputValues[booth][slot][member]" @input="validateValue(booth, slot, member)" />
-                    <button class="plus-and-minus" @click="increaseValue(booth, slot, member)">+</button>
+                    <button v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'" class="plus-and-minus" @click="decreaseValue(booth, slot, member)">−</button>
+                    <input
+                      v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'"
+                      type="number"
+                      :min="0"
+                      step="50"
+                      v-model.number="inputValues[booth][slot][member]"
+                      @input="validateValue(booth, slot, member)"
+                    />
+                    <button v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'" class="plus-and-minus" @click="increaseValue(booth, slot, member)">+</button>
 
                     <span v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'">บาท</span>
                   </label>
@@ -451,7 +458,7 @@ input {
   border-bottom: 1px solid #e9a5f1;
   outline: none;
   text-align: center;
-  width: 60px;
+  width: 50px;
   font-weight: 600;
   text-align: center;
 }
@@ -496,7 +503,7 @@ label {
   border: 1px solid #adf1ff;
   padding: 8px;
   text-align: center;
-  vertical-align: top;
+  vertical-align: center;
 }
 
 .sticky-column {
