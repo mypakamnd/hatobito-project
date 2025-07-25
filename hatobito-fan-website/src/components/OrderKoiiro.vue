@@ -109,7 +109,6 @@ const grandTotal = computed(() => {
 
 const orders = ref([{ product: "", member1: "", member2: "", quantity: 1 }]);
 
-// โหลดจาก localStorage ตอนเริ่มต้น
 onMounted(() => {
   const savedOrders = localStorage.getItem("orders");
   if (savedOrders) {
@@ -117,7 +116,6 @@ onMounted(() => {
   }
 });
 
-// บันทึกลง localStorage ทุกครั้งที่ orders เปลี่ยน
 watch(
   orders,
   (newOrders) => {
@@ -126,7 +124,6 @@ watch(
   { deep: true }
 );
 
-// รายการสินค้า
 const products = [
   { name: "Towel (ผ้าเช็ดตัว)", price: 450, memberCount: 0, memberType: "members" },
   { name: "Handheld Fan (พัดลม)", price: 300, memberCount: 0, memberType: "members" },
@@ -152,7 +149,6 @@ const products = [
   { name: "Coupon 50 THB", price: 50, memberCount: 1, memberType: "members" },
 ];
 
-// รายชื่อสมาชิก
 const members = [
   { id: 1, name: "Airi" },
   { id: 2, name: "Beam" },
@@ -184,41 +180,33 @@ const senbatsu = [
   { id: 9, name: "Mobile" },
 ];
 
-// const orders = reactive([{ product: "", member1: "", member2: "", quantity: 1 }]);
-
-// เพิ่มแถวใหม่
 function addOrder() {
   orders.value.push({ product: "", member1: "", member2: "", quantity: 1 });
 }
 
-// ลบแถว
 function removeOrder(index) {
   orders.value.splice(index, 1);
 }
 
-// ตรวจสอบจำนวนสมาชิกที่ต้องเลือก
 function requiresMemberCount(productName) {
   const product = products.find((p) => p.name === productName);
   return product?.memberCount || 0;
 }
 
-// ราคาต่อชิ้น
 function getUnitPrice(productName) {
   const product = products.find((p) => p.name === productName);
   return product?.price || 0;
 }
 
-// คำนวณราคารวม
 function getTotalPrice(item) {
   return getUnitPrice(item.product) * (item.quantity || 0);
 }
 
-// แสดงราคาสวย ๆ
 function formatPrice(price) {
   return `${price.toLocaleString()} ฿`;
 }
 
-// เลือก member list ตาม product
+// selcet member list from product
 function getMemberList(productName) {
   const product = products.find((p) => p.name === productName);
   if (!product) return [];
@@ -264,7 +252,7 @@ h2 {
 
 .div-a {
   display: flex;
-  justify-content: center; /* ตรงกลางแนวนอน */
+  justify-content: center;
   color: #2b8fa3;
   margin-top: 20px;
 }
@@ -292,14 +280,14 @@ input {
 
 .btn-click {
   display: flex;
-  justify-content: center; /* ตรงกลางแนวนอน */
+  justify-content: center;
   margin: 20px 10px 0px 0px;
 }
 
 .group-button {
   display: flex;
   flex-direction: row;
-  justify-content: center; /* ตรงกลางแนวนอน */
+  justify-content: center;
 }
 
 @media screen and (max-width: 768px) {
@@ -311,7 +299,7 @@ input {
   tfoot,
   tr {
     display: block;
-    margin: 0 auto; /* ← ตัวนี้ทำให้ชิดกลาง */
+    margin: 0 auto;
   }
 
   thead {
@@ -359,14 +347,14 @@ input {
 
   .btn-click {
     display: flex;
-    justify-content: center; /* ตรงกลางแนวนอน */
+    justify-content: center;
     margin: 5px 0px 5px 0px;
   }
 
   .group-button {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* ตรงกลางแนวนอน */
+    justify-content: center;
   }
 
   select {

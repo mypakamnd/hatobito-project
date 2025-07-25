@@ -56,17 +56,9 @@
                 <div class="member" v-for="member in filteredSchedule[booth][slot]" :key="member">
                   <label style="display: flex; align-items: center; gap: 4px">
                     {{ member }}
-                    <button v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'" class="plus-and-minus" @click="decreaseValue(booth, slot, member)">−</button>
-                    <input
-                      v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'"
-                      type="number"
-                      :min="0"
-                      step="50"
-                      v-model.number="inputValues[booth][slot][member]"
-                      @input="validateValue(booth, slot, member)"
-                    />
-                    <button v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'" class="plus-and-minus" @click="increaseValue(booth, slot, member)">+</button>
-
+                    <button @click="decreaseValue(booth, slot, member)">−</button>
+                    <input type="number" min="0" v-model.number="inputValues[booth][slot][member]" @input="validateValue(booth, slot, member)" />
+                    <button @click="increaseValue(booth, slot, member)">+</button>
                     <span v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'">บาท</span>
                   </label>
                 </div>
@@ -222,17 +214,17 @@ function increaseValue(booth, slot, member) {
 
 function decreaseValue(booth, slot, member) {
   const current = inputValues[booth][slot][member];
-  if (current >= 50) inputValues[booth][slot][member] -= 50;
+  if (current >= 50) {
+    inputValues[booth][slot][member] -= 50;
+  } else {
+    inputValues[booth][slot][member] = 0;
+  }
 }
 
 function validateValue(booth, slot, member) {
   let value = inputValues[booth][slot][member];
-  // ถ้าเป็น NaN หรือ < 0 ให้รีเซ็ตเป็น 0
-  if (isNaN(value) || value < 0) {
+  if (value < 0 || isNaN(value)) {
     inputValues[booth][slot][member] = 0;
-  } else {
-    // ปัดเศษให้ลงตัวกับ 50 (optional)
-    inputValues[booth][slot][member] = Math.round(value / 50) * 50;
   }
 }
 
@@ -349,7 +341,7 @@ function toggleGroup(member) {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10; /* ✅ เพิ่ม z-index ให้มากกว่าตาราง */
+  z-index: 10;
 }
 .modal-content {
   background: white;
@@ -418,7 +410,7 @@ h2 {
 
 .div-a {
   display: flex;
-  justify-content: center; /* ตรงกลางแนวนอน */
+  justify-content: center;
   color: #2b8fa3;
   margin-top: 20px;
 }

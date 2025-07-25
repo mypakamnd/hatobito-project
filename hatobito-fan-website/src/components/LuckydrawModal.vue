@@ -13,7 +13,7 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Row 1: จากบัตรเข้างาน -->
+          <!-- Row 1 -->
           <tr>
             <td>
               <select v-model="selectedTicket" @change="(e) => e.target.blur()">
@@ -29,7 +29,7 @@
             <td>{{ luckyDrawFromTicket }}</td>
           </tr>
 
-          <!-- Row 2: จากยอดรวมสินค้า / 600 -->
+          <!-- Row 2 -->
           <tr>
             <td>ยอดรวม {{ formatPrice(grandTotal) }}</td>
             <td>-</td>
@@ -99,23 +99,19 @@ function close() {
   emit("close");
 }
 
-// คำนวณ lucky draw จากบัตรเข้างาน
 const luckyDrawFromTicket = computed(() => {
   const ticket = tickets.find((t) => t.name === selectedTicket.value);
   return ticket ? ticket.luckyPerTicket * ticketCount.value : 0;
 });
 
-// คำนวณ lucky draw จากยอดรวมสินค้า / 600 (ปัดเศษทิ้ง)
 const luckyDrawFromTotal = computed(() => {
   return Math.floor((props.grandTotal || 0) / 600);
 });
 
-// รวมทั้งหมด
 const totalLuckyDraw = computed(() => {
   return luckyDrawFromTicket.value + luckyDrawFromTotal.value;
 });
 
-// แสดงราคาสวย ๆ
 function formatPrice(price) {
   return `${price.toLocaleString()} ฿`;
 }
@@ -195,7 +191,7 @@ input {
 }
 
 input:focus {
-  border-bottom: 2px solid #005261; /* เปลี่ยนสีเวลามี focus */
+  border-bottom: 2px solid #005261;
 }
 
 td {
