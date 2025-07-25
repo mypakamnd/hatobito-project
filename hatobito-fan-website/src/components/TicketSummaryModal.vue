@@ -80,10 +80,9 @@ const totalAmount = computed(() => Object.values(memberTotals.value).reduce((acc
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 100%;
-  max-width: 380px;
   max-height: 80vh;
   overflow-y: auto;
+  margin: 0px 10px;
 }
 
 h2 {
