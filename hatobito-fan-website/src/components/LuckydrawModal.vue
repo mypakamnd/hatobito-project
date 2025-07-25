@@ -201,6 +201,7 @@ input:focus {
 td {
   color: #098ba2;
   border: #098ba2 1px solid;
+  font-weight: 600;
 }
 
 tr {
@@ -210,7 +211,7 @@ tr {
 
 th {
   color: #098ba2;
-  background-color: #9bf0ff;
+  background-color: #e1faff;
   border: #098ba2 1px solid;
 }
 

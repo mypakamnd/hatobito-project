@@ -73,6 +73,26 @@
       <button @click="showModal = true" class="btn-click">คำนวณ Lucky Draw</button>
     </div>
 
+    <div class="div-a">
+      <a href="https://www.facebook.com/share/p/1EwNrTu2Dn/" target="_blank" class="text-sm font-bold flex items-center gap-1">
+        Official Goods Sample<svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-square-arrow-out-up-right-icon lucide-square-arrow-out-up-right"
+        >
+          <path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6" />
+          <path d="m21 3-9 9" />
+          <path d="M15 3h6v6" />
+        </svg>
+      </a>
+    </div>
     <LuckydrawModal :show="showModal" :grand-total="grandTotal" @close="showModal = false" />
   </div>
 </template>
@@ -111,7 +131,7 @@ const products = [
   { name: "Towel (ผ้าเช็ดตัว)", price: 450, memberCount: 0, memberType: "members" },
   { name: "Handheld Fan (พัดลม)", price: 300, memberCount: 0, memberType: "members" },
   { name: "Tumbler (กระบอกน้ำ)", price: 690, memberCount: 0, memberType: "members" },
-  { name: "SHIKISHI BOARD", price: 350, memberCount: 0, memberType: "members" },
+  { name: "SHIKISHI BOARD", price: 350, memberCount: 1, memberType: "members" },
   { name: "Costume Keychain", price: 250, memberCount: 0, memberType: "members" },
   { name: "Standy Acrylic 9 แบบ", price: 350, memberCount: 1, memberType: "senbatsu" },
   { name: "Couple Keychain 32 แบบ", price: 200, memberCount: 2, memberType: "members" },
@@ -240,6 +260,13 @@ th {
 
 h2 {
   color: #4ed7f1;
+}
+
+.div-a {
+  display: flex;
+  justify-content: center; /* ตรงกลางแนวนอน */
+  color: #2b8fa3;
+  margin-top: 20px;
 }
 
 .btn-click {

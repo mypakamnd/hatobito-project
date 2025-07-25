@@ -14,6 +14,7 @@
       </button>
       <button @click="showSummaryModal = true" class="btn-click">สรุป Summer Coupon</button>
     </div>
+    <span class="detail">** Koiiro Coupon จะมี 50 บาทและ 100 บาทเท่านั้น หากใส่ไม่ลงตัวระบบจะปิดทิ้ง **</span>
 
     <TicketSummaryModal v-if="showSummaryModal" :ticketData="inputValues" @close="showSummaryModal = false" />
 
@@ -53,9 +54,10 @@
             <td v-for="slot in timeSlots" :key="slot">
               <div class="member-list" v-if="filteredSchedule[booth][slot] && filteredSchedule[booth][slot].length">
                 <div class="member" v-for="member in filteredSchedule[booth][slot]" :key="member">
-                  <label style="display: flex; align-items: center; gap: 12px">
+                  <label style="display: flex; align-items: center; gap: 4px">
                     {{ member }}
                     <input v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'" type="number" min="0" v-model.number="inputValues[booth][slot][member]" />
+                    <span v-if="booth !== 'Concept Booth' && booth !== 'Sponsor Booth'">บาท</span>
                   </label>
                 </div>
               </div>
@@ -64,6 +66,27 @@
           </tr>
         </tbody>
       </table>
+
+      <div class="div-a">
+        <a href="https://www.facebook.com/share/p/1A1sFELmBm/" target="_blank" class="text-sm font-bold flex items-center gap-1">
+          Official Time Table<svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="lucide lucide-square-arrow-out-up-right-icon lucide-square-arrow-out-up-right"
+          >
+            <path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6" />
+            <path d="m21 3-9 9" />
+            <path d="M15 3h6v6" />
+          </svg>
+        </a>
+      </div>
     </div>
   </div>
 </template>
@@ -321,7 +344,7 @@ td {
   margin-right: 10px;
   font-weight: 600;
   border-radius: 5px;
-  margin: 5px 10px 20px 0px;
+  margin: 5px 10px 10px 0px;
   border: #4ed7f1 2px solid;
 }
 
@@ -362,6 +385,13 @@ td {
 h2 {
   color: #4ed7f1;
   margin-bottom: 1px;
+}
+
+.div-a {
+  display: flex;
+  justify-content: center; /* ตรงกลางแนวนอน */
+  color: #2b8fa3;
+  margin-top: 20px;
 }
 
 td {
@@ -499,6 +529,13 @@ li {
   justify-content: center;
 }
 
+.detail {
+  color: #ff5858;
+  font-weight: 600;
+  font-size: 16px;
+  padding: 20px;
+}
+
 @media screen and (max-width: 768px) {
   .planner-card {
     padding: 15px;
@@ -541,6 +578,10 @@ li {
 
   .checkbox-list {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detail {
+    font-size: 14px;
   }
 }
 </style>
