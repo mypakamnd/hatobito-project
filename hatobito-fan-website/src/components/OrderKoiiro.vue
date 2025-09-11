@@ -6,27 +6,29 @@
       <table class="w-full min-w-max text-sm">
         <thead class="bg-sky-300">
           <tr>
-            <th class="px-4 py-2">สินค้า</th>
-            <th class="px-4 py-2">Member 1</th>
-            <th class="px-4 py-2">Member 2</th>
-            <th class="px-4 py-2">จำนวน</th>
-            <th class="px-4 py-2">ราคารวม</th>
-            <th class="px-4 py-2">จัดการ</th>
+            <!-- ซ่อนเฉพาะหัวคอลัมน์ "สินค้า" ตอน mobile -->
+            <th class="px-4 py-2 hidden md:table-cell">Goods</th>
+            <th class="px-4 py-2">Member</th>
+            <th class="px-4 py-2">Amount</th>
+            <th class="px-4 py-2">Summary</th>
+            <th class="px-4 py-2 desktop-only">Manage</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in orders" :key="index" class="md:table-row">
+            <!-- สินค้า -->
             <td class="px-2 py-2 block md:table-cell" :data-label="'สินค้า'">
               <select v-model="item.product" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1">
-                <option disabled value="">เลือกสินค้า</option>
+                <option disabled value="">Select Goods</option>
                 <option v-for="product in products" :key="product.name" :value="product.name">
                   {{ product.name }}
                 </option>
               </select>
             </td>
 
-            <td class="px-2 py-2 block md:table-cell" :data-label="'Member 1'">
-              <select v-if="requiresMemberCount(item.product) >= 1" v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
+            <!-- Member -->
+            <td class="px-2 py-2 block md:table-cell" :data-label="'Member'">
+              <select v-if="requiresMemberCount(item.product) > 0" v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
                 <option disabled value="">เลือกสมาชิก</option>
                 <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
                   {{ member.name }}
@@ -35,26 +37,36 @@
               <span v-else class="text-gray-400">-</span>
             </td>
 
-            <td class="px-2 py-2 block md:table-cell" :data-label="'Member 2'">
-              <select v-if="requiresMemberCount(item.product) === 2" v-model="item.member2" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
-                <option disabled value="">เลือกสมาชิก</option>
-                <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
-                  {{ member.name }}
-                </option>
-              </select>
-              <span v-else class="text-gray-400">-</span>
+            <!-- จำนวน -->
+            <td :data-label="'จำนวน'">
+              <div class="flex items-center justify-center gap-1">
+                <button type="button" @click="if (item.quantity > 1) item.quantity--;">-</button>
+                <input type="number" min="1" v-model.number="item.quantity" class="w-16 text-center" />
+                <button type="button" @click="item.quantity++">+</button>
+              </div>
             </td>
 
-            <td class="px-2 py-2 text-center block md:table-cell" :data-label="'จำนวน'">
-              <input type="number" min="1" v-model.number="item.quantity" class="w-16 text-center px-1 py-0.5" />
-            </td>
-
+            <!-- ราคารวม -->
             <td class="px-2 py-2 text-right block md:table-cell" :data-label="'ราคารวม'">
               {{ formatPrice(getTotalPrice(item)) }}
             </td>
 
-            <td class="px-2 py-2 text-center block md:table-cell" :data-label="'จัดการ'">
-              <button @click="removeOrder(index)" class="text-red-500 hover:text-red-700">✖</button>
+            <!-- ลบ -->
+            <td class="delete-cell px-2 py-2 text-center block md:table-cell relative">
+              <button class="desktop-only text-red-500 hover:text-red-700" @click="removeOrder(index)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="delete-icon-desktop" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path
+                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"
+                  />
+                </svg>
+              </button>
+              <button class="mobile-only delete-icon" @click="removeOrder(index)">
+                <svg xmlns="http://www.w3.org/2000/svg" class="delete-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path
+                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"
+                  />
+                </svg>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -62,7 +74,7 @@
         <tfoot>
           <tr class="py-3">
             <td colspan="4" class="text-right font-bold py-3 pr-2 text-base">รวมทั้งหมด</td>
-            <td colspan="2" class="font-bold py-3 text-base">{{ formatPrice(getGrandTotal()) }}</td>
+            <td colspan="2" class="grand-total">{{ formatPrice(getGrandTotal()) }}</td>
           </tr>
         </tfoot>
       </table>
@@ -107,7 +119,7 @@ const grandTotal = computed(() => {
   return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);
 });
 
-const orders = ref([{ product: "", member1: "", member2: "", quantity: 1 }]);
+const orders = ref([{ product: "", member1: "", quantity: 1 }]);
 
 onMounted(() => {
   const savedOrders = localStorage.getItem("orders");
@@ -128,25 +140,25 @@ const products = [
   { name: "Towel (ผ้าเช็ดตัว)", price: 450, memberCount: 0, memberType: "members" },
   { name: "Handheld Fan (พัดลม)", price: 300, memberCount: 0, memberType: "members" },
   { name: "Tumbler (กระบอกน้ำ)", price: 690, memberCount: 0, memberType: "members" },
-  { name: "SHIKISHI BOARD", price: 350, memberCount: 1, memberType: "members" },
-  { name: "Costume Keychain", price: 250, memberCount: 0, memberType: "members" },
-  { name: "Standy Acrylic 9 แบบ", price: 350, memberCount: 1, memberType: "senbatsu" },
-  { name: "Couple Keychain 32 แบบ", price: 200, memberCount: 2, memberType: "members" },
-  { name: "Acrylic Block 9 แบบ", price: 350, memberCount: 1, memberType: "senbatsu" },
-  { name: "ID Photo Sticker 16 แบบ", price: 100, memberCount: 1, memberType: "members" },
   { name: "Random Mini Photo Card", price: 150, memberCount: 0, memberType: "members" },
   { name: "Random Mini pin snap(MV)", price: 200, memberCount: 0, memberType: "members" },
   { name: "Drinking Water Can", price: 50, memberCount: 0, memberType: "members" },
   { name: "Furin + 1 Member sign", price: 250, memberCount: 1, memberType: "members" },
-  { name: "Badge 9 แบบ", price: 150, memberCount: 1, memberType: "senbatsu" },
+  { name: "Costume Keychain", price: 250, memberCount: 0, memberType: "members" },
   { name: "Photo Collection VOL.13", price: 250, memberCount: 0, memberType: "members" },
-  { name: "Beach Shirt", price: 750, memberCount: 0, memberType: "members" },
   { name: "Koiiro Summer POSTER", price: 500, memberCount: 0, memberType: "members" },
+  { name: "Coupon 100 THB", price: 100, memberCount: 1, memberType: "members" },
+  { name: "Coupon 50 THB", price: 50, memberCount: 1, memberType: "members" },
+  { name: "SHIKISHI BOARD", price: 350, memberCount: 1, memberType: "members" },
+  { name: "Standy Acrylic 9 แบบ", price: 350, memberCount: 1, memberType: "senbatsu" },
+  { name: "Couple Keychain 32 แบบ", price: 200, memberCount: 1, memberType: "members" },
+  { name: "Acrylic Block 9 แบบ", price: 350, memberCount: 1, memberType: "senbatsu" },
+  { name: "ID Photo Sticker 16 แบบ", price: 100, memberCount: 1, memberType: "members" },
+  { name: "Badge 9 แบบ", price: 150, memberCount: 1, memberType: "senbatsu" },
+  { name: "Beach Shirt", price: 750, memberCount: 0, memberType: "members" },
   { name: "Koiiro Member POSTER", price: 350, memberCount: 1, memberType: "senbatsu" },
   { name: "HatoBito Snap", price: 400, memberCount: 1, memberType: "members" },
   { name: "HatoBito Mini Snap", price: 300, memberCount: 1, memberType: "members" },
-  { name: "Coupon 100 THB", price: 100, memberCount: 1, memberType: "members" },
-  { name: "Coupon 50 THB", price: 50, memberCount: 1, memberType: "members" },
 ];
 
 const members = [
@@ -181,7 +193,7 @@ const senbatsu = [
 ];
 
 function addOrder() {
-  orders.value.push({ product: "", member1: "", member2: "", quantity: 1 });
+  orders.value.push({ product: "", member1: "", quantity: 1 });
 }
 
 function removeOrder(index) {
@@ -290,7 +302,102 @@ input {
   justify-content: center;
 }
 
+.mobile-only {
+  display: none;
+}
+
+/* ปุ่มลบ mobile ที่มุมขวาล่าง */
+.delete-icon {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #ff4d4f;
+}
+
+.delete-icon-desktop {
+  width: 16px;
+  height: 16px;
+  fill: #098ba2; /* ปรับสีด้วยก็ได้ */
+  cursor: pointer;
+}
+
 @media screen and (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+  .mobile-only {
+    display: inline-block;
+  }
+
+  .delete-icon {
+    width: 18px;
+    height: 18px;
+    fill: #098ba2; /* ปรับสีด้วยก็ได้ */
+    cursor: pointer;
+  }
+
+  td[data-label="สินค้า"] {
+    display: block !important;
+    width: 100% !important;
+    text-align: center;
+    padding: 0.5rem 0;
+  }
+
+  td[data-label="สินค้า"]::before {
+    content: none !important;
+  }
+
+  td[data-label="สินค้า"] select {
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 16px;
+    color: #ff4d4f;
+  }
+
+  td[data-label="ราคารวม"] {
+    border: none;
+  }
+
+  td[data-label="จำนวน"] {
+    border: none;
+    color: #ff4d4f;
+  }
+
+  td[data-label="Member"] {
+    color: #ff4d4f;
+  }
+
+  td.delete-cell {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    text-align: right;
+  }
+
+  td.delete-cell::before {
+    content: none !important;
+  }
+
+  .grand-total {
+    position: relative;
+    padding-left: 35%;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    border: none;
+  }
+
+  input {
+    border: none;
+    border-bottom: 1px solid #ff4d4f;
+    outline: none;
+  }
+
   table,
   thead,
   tbody,
@@ -319,6 +426,8 @@ input {
     position: relative;
     padding-left: 35%;
     padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     text-align: center;
     border: none;
     border-bottom: 1px solid #2b8fa3;
@@ -348,7 +457,7 @@ input {
   .btn-click {
     display: flex;
     justify-content: center;
-    margin: 5px 0px 5px 0px;
+    margin: 5px 50px 5px 50px;
   }
 
   .group-button {
