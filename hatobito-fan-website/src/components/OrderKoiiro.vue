@@ -281,13 +281,13 @@ table {
 
 td {
   color: #6500e4;
-  border: #6500e4 1px solid;
+  border: #370079 1px solid;
   font-weight: 600;
 }
 
 tr {
   color: #6500e4;
-  border: #6500e4 1px solid;
+  border: #370079 1px solid;
 }
 
 th {

@@ -83,7 +83,7 @@ onMounted(() => {
       selectedTicket.value = parsed.ticketName || "";
       ticketCount.value = parsed.ticketCount || 0;
     } catch (e) {
-      console.error("❌ ไม่สามารถแปลง JSON จาก localStorage ได้:", e);
+      console.error("load local storage failed.", e);
     }
   }
 });
@@ -186,33 +186,34 @@ select {
 input {
   text-align: center;
   border: none;
-  border-bottom: 1px solid #7700f0;
+  border-bottom: 1px solid #370079;
   outline: none;
 }
 
 input:focus {
-  border-bottom: 1px solid #7700f0;
+  border-bottom: 1px solid #370079;
 }
 
 td {
   color: #7700f0;
-  border: #7700f0 1px solid;
+  border: #370079 1px solid;
   font-weight: 600;
 }
 
 tr {
   color: #7700f0;
-  border: #7700f0 1px solid;
+  border: #370079 1px solid;
 }
 
 th {
   color: #ffffff;
-  background-color: #9428ff;
-  border: #7700f0 1px solid;
+  background: #6500e4;
+  background: linear-gradient(90deg, rgba(101, 0, 228, 1) 15%, rgba(207, 3, 2, 1) 85%);
+  border: #370079 1px solid;
 }
 
 h2 {
-  color: #ff4d4f;
+  color: #cf0302;
 }
 
 @media screen and (max-width: 768px) {
