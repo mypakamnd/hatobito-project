@@ -1,6 +1,6 @@
 <template>
   <div class="civil-order-form">
-    <h1 class="text-xl font-bold mb-4">HatoBito Civil War Goods</h1>
+    <h1 class="text-xl font-bold mb-4">Declaration of Civil War Goods</h1>
 
     <div class="overflow-x-auto">
       <table class="w-full min-w-max text-sm">
@@ -102,7 +102,7 @@
     </div>
 
     <div class="div-a">
-      <a href="https://www.facebook.com/share/p/1EwNrTu2Dn/" target="_blank" class="text-sm font-bold flex items-center gap-1">
+      <a href="https://www.facebook.com/share/p/16smm1AWdL/" target="_blank" class="text-sm font-bold flex items-center gap-1">
         Official Goods Sample<svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -280,51 +280,55 @@ table {
 }
 
 td {
-  color: #7700f0;
-  border: #7700f0 1px solid;
+  color: #6500e4;
+  border: #6500e4 1px solid;
   font-weight: 600;
 }
 
 tr {
-  color: #7700f0;
-  border: #7700f0 1px solid;
+  color: #6500e4;
+  border: #6500e4 1px solid;
 }
 
 th {
   color: #ffffff;
-  background-color: #9428ff;
-  border: #7700f0 1px solid;
+  background: #6500e4;
+  background: linear-gradient(90deg, rgba(101, 0, 228, 1) 15%, rgba(207, 3, 2, 1) 85%);
+  border: #370079 1px solid;
 }
 
 h1 {
-  color: #ff4d4f;
+  color: #cf0302;
+  font-size: 28px;
 }
 
 .div-a {
   display: flex;
   justify-content: center;
-  color: #ff4d4f;
+  color: #cf0302;
   margin-top: 20px;
 }
 
 .btn-click {
   color: #ffffff;
-  background-color: #ff0004;
+  background: #6500e4;
+  background: linear-gradient(90deg, rgba(101, 0, 228, 1) 15%, rgba(207, 3, 2, 1) 85%);
   padding: 10px 20px;
   margin-right: 10px;
   font-weight: bold;
   border-radius: 5px;
-  border: #9428ff 2px solid;
+  border: #6500e4 2px solid;
 }
 
 .btn-click:hover {
   color: #f0faff;
-  background-color: #9428ff;
+  background: #8b2bff;
+  background: linear-gradient(90deg, rgba(139, 43, 255, 1) 15%, rgba(255, 51, 51, 1) 85%);
 }
 
 input {
   border: none;
-  border-bottom: 1px solid #7700f0;
+  border-bottom: 1px solid #6500e4;
   outline: none;
 }
 
@@ -348,13 +352,13 @@ input {
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #ff4d4f;
+  color: #cf0302;
 }
 
 .delete-icon-desktop {
   width: 16px;
   height: 16px;
-  fill: #7700f0;
+  fill: #6500e4;
   cursor: pointer;
 }
 
@@ -403,21 +407,21 @@ input {
     text-align: center;
     margin: 0 auto;
     font-size: 16px;
-    color: #ff4d4f;
+    color: #cf0302;
   }
 
   td[data-label="Summary"] {
     border: none;
-    color: #ff4d4f;
+    color: #cf0302;
   }
 
   td[data-label="amount"] {
     border: none;
-    color: #ff4d4f;
+    color: #cf0302;
   }
 
   td[data-label="Member"] {
-    color: #ff4d4f;
+    color: #cf0302;
   }
 
   td.delete-cell {
@@ -438,12 +442,12 @@ input {
     padding-bottom: 10px;
     text-align: center;
     border: none;
-    color: #ff4d4f;
+    color: #cf0302;
   }
 
   input {
     border: none;
-    border-bottom: 1px solid #ff4d4f;
+    border-bottom: 1px solid #cf0302;
     outline: none;
   }
 
@@ -517,8 +521,8 @@ input {
   }
 
   .btn-click:hover {
-    color: #f0faff;
-    background-color: #ff4d4f;
+    background: #6500e4;
+    background: linear-gradient(90deg, rgba(101, 0, 228, 1) 15%, rgba(207, 3, 2, 1) 85%);
   }
 
   select {
