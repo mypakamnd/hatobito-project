@@ -152,24 +152,24 @@ select {
 }
 
 td {
-  color: #098ba2;
-  border: #098ba2 1px solid;
+  color: #7700f0;
+  border: #7700f0 1px solid;
   font-weight: 600;
 }
 
 tr {
-  color: #098ba2;
-  border: #098ba2 1px solid;
+  color: #7700f0;
+  border: #7700f0 1px solid;
 }
 
 th {
-  color: #098ba2;
-  background-color: #e1faff;
-  border: #098ba2 1px solid;
+  color: #ffffff;
+  background-color: #9428ff;
+  border: #7700f0 1px solid;
 }
 
 h2 {
-  color: #098ba2;
+  color: #ff4d4f;
 }
 
 @media screen and (max-width: 768px) {

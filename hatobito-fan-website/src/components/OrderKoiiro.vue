@@ -497,6 +497,11 @@ input {
     justify-content: center;
   }
 
+  .btn-click:hover {
+    color: #f0faff;
+    background-color: #ff4d4f;
+  }
+
   select {
     text-align: center;
   }
