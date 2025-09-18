@@ -123,7 +123,7 @@
     </div>
     <LuckydrawModal :show="showModalLuckyDraw" :grand-total="grandTotal" @close="showModalLuckyDraw = false" />
     <PointSummaryMadal :show="showModalPoint" :grand-total="pointTotal" @close="showModalPoint = false" />
-    <OrderSummaryModal :show="showSummaryModal" :orders="orders" @close="closeSummary" />
+    <!-- <OrderSummaryModal :show="showSummaryModal" :orders="orders" @close="closeSummary" /> -->
   </div>
 </template>
 
@@ -132,7 +132,7 @@ import { ref, watch, onMounted } from "vue";
 import { computed } from "vue";
 import LuckydrawModal from "./LuckydrawModal.vue";
 import PointSummaryMadal from "./PointSummaryMadal.vue";
-import OrderSummaryModal from "./OrderSummaryModal.vue";
+// import OrderSummaryModal from "./OrderSummaryModal.vue";
 
 const showModalLuckyDraw = ref(false);
 const showModalPoint = ref(false);
@@ -148,12 +148,12 @@ const pointTotal = computed(() => {
 
 const orders = ref([{ product: "", member1: "", quantity: 1 }]);
 
-const openSummary = () => {
-  showSummaryModal.value = true;
-};
-const closeSummary = () => {
-  showSummaryModal.value = false;
-};
+// const openSummary = () => {
+//   showSummaryModal.value = true;
+// };
+// const closeSummary = () => {
+//   showSummaryModal.value = false;
+// };
 
 onMounted(() => {
   const savedOrders = localStorage.getItem("orders");
