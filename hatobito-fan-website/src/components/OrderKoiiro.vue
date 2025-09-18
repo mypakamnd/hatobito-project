@@ -1,5 +1,5 @@
 <template>
-  <div class="koiiro-order-form">
+  <div class="civil-order-form">
     <h1 class="text-xl font-bold mb-4">HatoBito Civil War Goods</h1>
 
     <div class="overflow-x-auto">
@@ -98,6 +98,7 @@
       <button @click="addOrder" class="btn-click">+ เพิ่มรายการ</button>
       <button @click="showModalLuckyDraw = true" class="btn-click">คำนวณ Lucky Draw</button>
       <button @click="showModalPoint = true" class="btn-click">คำนวณ Point</button>
+      <!-- <button @click="openSummary = true" class="btn-click">สรุปรายการ</button> -->
     </div>
 
     <div class="div-a">
@@ -122,6 +123,7 @@
     </div>
     <LuckydrawModal :show="showModalLuckyDraw" :grand-total="grandTotal" @close="showModalLuckyDraw = false" />
     <PointSummaryMadal :show="showModalPoint" :grand-total="pointTotal" @close="showModalPoint = false" />
+    <OrderSummaryModal :show="showSummaryModal" :orders="orders" @close="closeSummary" />
   </div>
 </template>
 
@@ -130,9 +132,11 @@ import { ref, watch, onMounted } from "vue";
 import { computed } from "vue";
 import LuckydrawModal from "./LuckydrawModal.vue";
 import PointSummaryMadal from "./PointSummaryMadal.vue";
+import OrderSummaryModal from "./OrderSummaryModal.vue";
 
 const showModalLuckyDraw = ref(false);
 const showModalPoint = ref(false);
+const showSummaryModal = ref(false);
 
 const grandTotal = computed(() => {
   return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);
@@ -143,6 +147,13 @@ const pointTotal = computed(() => {
 });
 
 const orders = ref([{ product: "", member1: "", quantity: 1 }]);
+
+const openSummary = () => {
+  showSummaryModal.value = true;
+};
+const closeSummary = () => {
+  showSummaryModal.value = false;
+};
 
 onMounted(() => {
   const savedOrders = localStorage.getItem("orders");
@@ -160,10 +171,18 @@ watch(
 );
 
 const products = [
+  { name: "Badge", price: 150, memberCount: 0, memberType: "members" },
   { name: "Yume Dake POSTER", price: 500, memberCount: 0, memberType: "members" },
   { name: "Flickering Light POSTER", price: 500, memberCount: 0, memberType: "members" },
   { name: "Yume Dake Member POSTER", price: 350, memberCount: 1, memberType: "yumeDake" },
   { name: "Flickering Light Member POSTER", price: 350, memberCount: 1, memberType: "flickeringLight" },
+  { name: "Photoset Collection Vol.14", price: 250, memberCount: 0, memberType: "members" },
+  { name: "Cheki Box", price: 250, memberCount: 0, memberType: "members" },
+  { name: "Shot Glass", price: 200, memberCount: 0, memberType: "members" },
+  { name: "Hand Fan", price: 50, memberCount: 0, memberType: "members" },
+  { name: "Pin Logo", price: 150, memberCount: 0, memberType: "members" },
+  { name: "Costume Keychain", price: 250, memberCount: 0, memberType: "members" },
+  { name: "Photo Card Collection", price: 200, memberCount: 0, memberType: "members" },
   { name: "HatoBito Snap", price: 400, memberCount: 1, memberType: "members" },
   { name: "HatoBito Mini Snap", price: 300, memberCount: 1, memberType: "members" },
 ];
@@ -253,7 +272,7 @@ function getGrandTotal() {
 table {
   width: 100%;
 }
-.koiiro-order-form {
+.civil-order-form {
   margin: auto;
   padding: 30px;
   background: rgba(255, 255, 255);
@@ -479,7 +498,7 @@ input {
     border-bottom: none;
   }
 
-  .koiiro-order-form {
+  .civil-order-form {
     margin: auto;
     padding: 15px 0px 0px 0px;
   }
