@@ -14,11 +14,11 @@ const activeTab = computed(() => route.path);
 
 <template>
   <div class="card-container">
-    <!-- แถบแท็บ -->
-    <div class="tabs-container">
-      <button class="tab-button" :class="{ active: activeTab === '/' }" @click="goTo('/')">คำนวณ Goods</button>
-      <button class="tab-button" :class="{ active: activeTab === '/koiiro-planner' }" @click="goTo('/koiiro-planner')">วางแพลน Summer Booth</button>
-    </div>
+    <!-- tap -->
+    <!-- <div class="tabs-container">
+      <button class="tab-button" :class="{ active: activeTab === '/' }" @click="goTo('/')">HatoBito</button>
+      <button class="tab-button" :class="{ active: activeTab === '/order-angevil' }" @click="goTo('/order-angevil')">Angevil</button>
+    </div> -->
 
     <div class="tab-content">
       <router-view />

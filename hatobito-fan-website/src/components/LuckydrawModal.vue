@@ -217,8 +217,15 @@ h2 {
 
 @media screen and (max-width: 768px) {
   .modal-content {
-    min-width: 300px;
+    padding: 1rem;
+    min-width: 95%;
     max-width: 90%;
+  }
+
+  .draw-table th,
+  .draw-table td {
+    padding: 8px 8px;
+    text-align: center;
   }
 }
 </style>

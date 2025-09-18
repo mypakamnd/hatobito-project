@@ -1,22 +1,22 @@
 <template>
   <div class="koiiro-order-form">
-    <h2 class="text-xl font-bold mb-4">HatoBito Koiiro Summer Goods</h2>
+    <h1 class="text-xl font-bold mb-4">HatoBito Civil War Goods</h1>
 
     <div class="overflow-x-auto">
       <table class="w-full min-w-max text-sm">
         <thead class="bg-sky-300">
           <tr>
-            <!-- ซ่อนเฉพาะหัวคอลัมน์ "สินค้า" ตอน mobile -->
+            <!-- Goods column on mobile desktop -->
             <th class="px-4 py-2 hidden md:table-cell">Goods</th>
             <th class="px-4 py-2">Member</th>
             <th class="px-4 py-2">Amount</th>
             <th class="px-4 py-2">Summary</th>
-            <th class="px-4 py-2 desktop-only">Manage</th>
+            <th class="px-4 py-2 desktop-only">Delete</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in orders" :key="index" class="md:table-row">
-            <!-- สินค้า -->
+            <!-- goods -->
             <td class="px-2 py-2 block md:table-cell" :data-label="'สินค้า'">
               <select v-model="item.product" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1">
                 <option disabled value="">Select Goods</option>
@@ -26,19 +26,33 @@
               </select>
             </td>
 
-            <!-- Member -->
-            <td class="px-2 py-2 block md:table-cell" :data-label="'Member'">
-              <select v-if="requiresMemberCount(item.product) > 0" v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
-                <option disabled value="">เลือกสมาชิก</option>
+            <!-- member on desktop -->
+            <td class="desktop-only px-2 py-2" data-label="Member">
+              <template v-if="requiresMemberCount(item.product) > 0">
+                <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
+                  <option disabled value="">- select member -</option>
+                  <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
+                    {{ member.name }}
+                  </option>
+                </select>
+              </template>
+              <template v-else>
+                <span class="text-gray-400">-</span>
+              </template>
+            </td>
+
+            <!-- member on mobile -->
+            <td v-if="requiresMemberCount(item.product) > 0" class="mobile-only" data-label="Member">
+              <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
+                <option disabled value="">- select member -</option>
                 <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
                   {{ member.name }}
                 </option>
               </select>
-              <span v-else class="text-gray-400">-</span>
             </td>
 
-            <!-- จำนวน -->
-            <td :data-label="'จำนวน'">
+            <!-- amount -->
+            <td :data-label="'amount'">
               <div class="flex items-center justify-center gap-1">
                 <button type="button" @click="if (item.quantity > 1) item.quantity--;">-</button>
                 <input type="number" min="1" v-model.number="item.quantity" class="w-16 text-center" />
@@ -46,12 +60,12 @@
               </div>
             </td>
 
-            <!-- ราคารวม -->
-            <td class="px-2 py-2 text-right block md:table-cell" :data-label="'ราคารวม'">
+            <!-- summary -->
+            <td class="px-2 py-2 text-right block md:table-cell" :data-label="'Summary'">
               {{ formatPrice(getTotalPrice(item)) }}
             </td>
 
-            <!-- ลบ -->
+            <!-- delete row -->
             <td class="delete-cell px-2 py-2 text-center block md:table-cell relative">
               <button class="desktop-only text-red-500 hover:text-red-700" @click="removeOrder(index)">
                 <svg xmlns="http://www.w3.org/2000/svg" class="delete-icon-desktop" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
@@ -73,7 +87,7 @@
 
         <tfoot>
           <tr class="py-3">
-            <td colspan="4" class="text-right font-bold py-3 pr-2 text-base">รวมทั้งหมด</td>
+            <td colspan="4" class="text-right font-bold py-3 pr-2 text-base">Summary</td>
             <td colspan="2" class="grand-total">{{ formatPrice(getGrandTotal()) }}</td>
           </tr>
         </tfoot>
@@ -82,7 +96,8 @@
 
     <div class="group-button">
       <button @click="addOrder" class="btn-click">+ เพิ่มรายการ</button>
-      <button @click="showModal = true" class="btn-click">คำนวณ Lucky Draw</button>
+      <button @click="showModalLuckyDraw = true" class="btn-click">คำนวณ Lucky Draw</button>
+      <button @click="showModalPoint = true" class="btn-click">คำนวณ Point</button>
     </div>
 
     <div class="div-a">
@@ -105,7 +120,8 @@
         </svg>
       </a>
     </div>
-    <LuckydrawModal :show="showModal" :grand-total="grandTotal" @close="showModal = false" />
+    <LuckydrawModal :show="showModalLuckyDraw" :grand-total="grandTotal" @close="showModalLuckyDraw = false" />
+    <PointSummaryMadal :show="showModalPoint" :grand-total="pointTotal" @close="showModalPoint = false" />
   </div>
 </template>
 
@@ -113,9 +129,16 @@
 import { ref, watch, onMounted } from "vue";
 import { computed } from "vue";
 import LuckydrawModal from "./LuckydrawModal.vue";
+import PointSummaryMadal from "./PointSummaryMadal.vue";
 
-const showModal = ref(false);
+const showModalLuckyDraw = ref(false);
+const showModalPoint = ref(false);
+
 const grandTotal = computed(() => {
+  return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);
+});
+
+const pointTotal = computed(() => {
   return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);
 });
 
@@ -137,26 +160,10 @@ watch(
 );
 
 const products = [
-  { name: "Towel (ผ้าเช็ดตัว)", price: 450, memberCount: 0, memberType: "members" },
-  { name: "Handheld Fan (พัดลม)", price: 300, memberCount: 0, memberType: "members" },
-  { name: "Tumbler (กระบอกน้ำ)", price: 690, memberCount: 0, memberType: "members" },
-  { name: "Random Mini Photo Card", price: 150, memberCount: 0, memberType: "members" },
-  { name: "Random Mini pin snap(MV)", price: 200, memberCount: 0, memberType: "members" },
-  { name: "Drinking Water Can", price: 50, memberCount: 0, memberType: "members" },
-  { name: "Furin + 1 Member sign", price: 250, memberCount: 1, memberType: "members" },
-  { name: "Costume Keychain", price: 250, memberCount: 0, memberType: "members" },
-  { name: "Photo Collection VOL.13", price: 250, memberCount: 0, memberType: "members" },
-  { name: "Koiiro Summer POSTER", price: 500, memberCount: 0, memberType: "members" },
-  { name: "Coupon 100 THB", price: 100, memberCount: 1, memberType: "members" },
-  { name: "Coupon 50 THB", price: 50, memberCount: 1, memberType: "members" },
-  { name: "SHIKISHI BOARD", price: 350, memberCount: 1, memberType: "members" },
-  { name: "Standy Acrylic 9 แบบ", price: 350, memberCount: 1, memberType: "senbatsu" },
-  { name: "Couple Keychain 32 แบบ", price: 200, memberCount: 1, memberType: "members" },
-  { name: "Acrylic Block 9 แบบ", price: 350, memberCount: 1, memberType: "senbatsu" },
-  { name: "ID Photo Sticker 16 แบบ", price: 100, memberCount: 1, memberType: "members" },
-  { name: "Badge 9 แบบ", price: 150, memberCount: 1, memberType: "senbatsu" },
-  { name: "Beach Shirt", price: 750, memberCount: 0, memberType: "members" },
-  { name: "Koiiro Member POSTER", price: 350, memberCount: 1, memberType: "senbatsu" },
+  { name: "Yume Dake POSTER", price: 500, memberCount: 0, memberType: "members" },
+  { name: "Flickering Light POSTER", price: 500, memberCount: 0, memberType: "members" },
+  { name: "Yume Dake Member POSTER", price: 350, memberCount: 1, memberType: "yumeDake" },
+  { name: "Flickering Light Member POSTER", price: 350, memberCount: 1, memberType: "flickeringLight" },
   { name: "HatoBito Snap", price: 400, memberCount: 1, memberType: "members" },
   { name: "HatoBito Mini Snap", price: 300, memberCount: 1, memberType: "members" },
 ];
@@ -180,16 +187,26 @@ const members = [
   { id: 16, name: "Mobile" },
 ];
 
-const senbatsu = [
-  { id: 1, name: "Airi" },
-  { id: 2, name: "Beam" },
-  { id: 3, name: "Music" },
-  { id: 4, name: "Smild" },
-  { id: 5, name: "Gorya" },
-  { id: 6, name: "Kana" },
-  { id: 7, name: "Chelsea" },
+const yumeDake = [
+  { id: 1, name: "Pchi" },
+  { id: 2, name: "Airi" },
+  { id: 3, name: "Smild" },
+  { id: 4, name: "View" },
+  { id: 5, name: "ElleElle" },
+  { id: 6, name: "Gorya" },
+  { id: 7, name: "Kana" },
   { id: 8, name: "Nata" },
-  { id: 9, name: "Mobile" },
+];
+
+const flickeringLight = [
+  { id: 1, name: "Music" },
+  { id: 2, name: "Summer" },
+  { id: 3, name: "Punnhyaz" },
+  { id: 4, name: "Beam" },
+  { id: 5, name: "Chelsea" },
+  { id: 6, name: "Donut" },
+  { id: 7, name: "Milin" },
+  { id: 8, name: "Mobile" },
 ];
 
 function addOrder() {
@@ -222,7 +239,9 @@ function formatPrice(price) {
 function getMemberList(productName) {
   const product = products.find((p) => p.name === productName);
   if (!product) return [];
-  return product.memberType === "senbatsu" ? senbatsu : members;
+  if (product.memberType === "yumeDake") return yumeDake;
+  if (product.memberType === "flickeringLight") return flickeringLight;
+  return members;
 }
 
 function getGrandTotal() {
@@ -242,61 +261,56 @@ table {
 }
 
 td {
-  color: #2b8fa3;
-  border: #2b8fa3 1px solid;
+  color: #7700f0;
+  border: #7700f0 1px solid;
   font-weight: 600;
 }
 
 tr {
-  color: #2b8fa3;
-  border: #2b8fa3 1px solid;
+  color: #7700f0;
+  border: #7700f0 1px solid;
 }
 
 th {
-  color: #2b8fa3;
-  background-color: #e1faff;
-  border: #2b8fa3 1px solid;
+  color: #ffffff;
+  background-color: #9428ff;
+  border: #7700f0 1px solid;
 }
 
-h2 {
-  color: #4ed7f1;
+h1 {
+  color: #ff4d4f;
 }
 
 .div-a {
   display: flex;
   justify-content: center;
-  color: #2b8fa3;
+  color: #ff4d4f;
   margin-top: 20px;
 }
 
 .btn-click {
-  color: #4ed7f1;
-  background-color: #fffbb2;
+  color: #ffffff;
+  background-color: #ff0004;
   padding: 10px 20px;
   margin-right: 10px;
   font-weight: bold;
   border-radius: 5px;
-  border: #4ed7f1 2px solid;
+  border: #9428ff 2px solid;
 }
 
 .btn-click:hover {
   color: #f0faff;
-  background-color: #4ed7f1;
+  background-color: #9428ff;
 }
 
 input {
   border: none;
-  border-bottom: 1px solid #098ba2;
+  border-bottom: 1px solid #7700f0;
   outline: none;
 }
 
-.btn-click {
-  display: flex;
-  justify-content: center;
-  margin: 20px 10px 0px 0px;
-}
-
 .group-button {
+  margin: 20px 0px 10px 0px;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -306,7 +320,7 @@ input {
   display: none;
 }
 
-/* ปุ่มลบ mobile ที่มุมขวาล่าง */
+/* delete icon on mobile dektop */
 .delete-icon {
   position: absolute;
   bottom: 5px;
@@ -321,22 +335,36 @@ input {
 .delete-icon-desktop {
   width: 16px;
   height: 16px;
-  fill: #098ba2; /* ปรับสีด้วยก็ได้ */
+  fill: #7700f0;
   cursor: pointer;
 }
 
+/* Desktop by default */
+.mobile-only {
+  display: none;
+}
+.desktop-only {
+  display: table-cell;
+}
+
+/* Mobile */
 @media screen and (max-width: 768px) {
+  .mobile-only {
+    display: table-cell;
+  }
   .desktop-only {
     display: none;
   }
+
   .mobile-only {
     display: inline-block;
+    width: 100%;
   }
 
   .delete-icon {
     width: 18px;
     height: 18px;
-    fill: #098ba2; /* ปรับสีด้วยก็ได้ */
+    fill: #5c00b9;
     cursor: pointer;
   }
 
@@ -359,11 +387,12 @@ input {
     color: #ff4d4f;
   }
 
-  td[data-label="ราคารวม"] {
+  td[data-label="Summary"] {
     border: none;
+    color: #ff4d4f;
   }
 
-  td[data-label="จำนวน"] {
+  td[data-label="amount"] {
     border: none;
     color: #ff4d4f;
   }
@@ -390,6 +419,7 @@ input {
     padding-bottom: 10px;
     text-align: center;
     border: none;
+    color: #ff4d4f;
   }
 
   input {
@@ -415,10 +445,10 @@ input {
 
   tr {
     margin-bottom: 1rem;
-    border: 1px solid #2b8fa3;
+    border: 1px solid #5c00b9;
     border-radius: 10px;
     padding: 10px;
-    background-color: #f7feff;
+    background-color: #ffffff;
     max-width: 310px;
   }
 
@@ -430,7 +460,7 @@ input {
     padding-bottom: 10px;
     text-align: center;
     border: none;
-    border-bottom: 1px solid #2b8fa3;
+    border-bottom: 1px solid #5c00b9;
   }
 
   td::before {
@@ -441,7 +471,7 @@ input {
     white-space: nowrap;
     content: attr(data-label);
     font-weight: bold;
-    color: #2b8fa3;
+    color: #5c00b9;
     text-transform: uppercase;
   }
 
@@ -457,10 +487,11 @@ input {
   .btn-click {
     display: flex;
     justify-content: center;
-    margin: 5px 50px 5px 50px;
+    margin: 5px 30px 5px 30px;
   }
 
   .group-button {
+    margin: 0px 0px 0px 0px;
     display: flex;
     flex-direction: column;
     justify-content: center;
