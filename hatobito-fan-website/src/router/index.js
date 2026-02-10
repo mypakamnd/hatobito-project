@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import KoiiroGoodsForm from '../components/OrderKoiiro.vue'
 import KoiiroPlanner from '../components/PlannerKoiiro.vue'
 import OrderAngevil from '../components/OrderAngevil.vue'
-import TabGaming from '../components/TapGaming.vue'
+// import TabGaming from '../components/TapGaming.vue'
 
 const routes = [
   { path: '/', name: 'KoiiroGoodsForm', component: KoiiroGoodsForm },
