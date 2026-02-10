@@ -9,7 +9,7 @@ const routes = [
   { path: '/', name: 'KoiiroGoodsForm', component: KoiiroGoodsForm },
   { path: '/koiiro-planner', name: 'KoiiroPlanner', component: KoiiroPlanner },
   { path: '/order-angevil', name: 'KoiiroPlanner', component: OrderAngevil },
-  {path: '/tab-gaming', name: 'TabGaming', component: TabGaming }
+  // {path: '/tab-gaming', name: 'TabGaming', component: TabGaming }
 ]
 
 const router = createRouter({
