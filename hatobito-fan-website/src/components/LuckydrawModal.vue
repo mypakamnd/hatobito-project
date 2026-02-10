@@ -1,44 +1,66 @@
 <template>
   <div v-if="show" class="modal-overlay" @click.self="close">
-    <div class="modal-content">
-      <button class="modal-close" @click="close">✖</button>
-      <h2 class="modal-title">Lucky Draw Calculation</h2>
+    <div class="modal-content flex flex-col md:flex-row gap-6">
+      <!-- Lucky Draw Card -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 flex-1">
+        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">Lucky Draw Calculation</h2>
 
-      <table class="draw-table">
-        <thead>
-          <tr>
-            <th>Lucky Draw From</th>
-            <th>จำนวนบัตรเข้างาน</th>
-            <th>จำนวน Lucky Draw</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Row 1 -->
-          <tr>
-            <td>
-              <select v-model="selectedTicket" @change="(e) => e.target.blur()">
-                <option disabled value="">- เลือกรายการบัตร -</option>
-                <option v-for="ticket in tickets" :key="ticket.name" :value="ticket.name">
-                  {{ ticket.name }}
-                </option>
-              </select>
-            </td>
-            <td>
-              <input type="number" min="1" v-model.number="ticketCount" />
-            </td>
-            <td>{{ luckyDrawFromTicket }}</td>
-          </tr>
+        <!-- Select Ticket -->
+        <div class="mb-4">
+          <label class="block font-semibold mb-2"> เลือกบัตรเข้างาน </label>
 
-          <!-- Row 2 -->
-          <tr>
-            <td>ยอดรวม {{ formatPrice(grandTotal) }}</td>
-            <td>-</td>
-            <td>{{ luckyDrawFromTotal }}</td>
-          </tr>
-        </tbody>
-      </table>
+          <select class="w-full rounded-xl px-4 py-3 bg-gray-50 font-semibold appearance-none" v-model="selectedTicket" @change="(e) => e.target.blur()">
+            <option disabled value="">- เลือกรายการบัตร -</option>
+            <option v-for="ticket in tickets" :key="ticket.name" :value="ticket.name">
+              {{ ticket.name }}
+            </option>
+          </select>
+        </div>
 
-      <h2 class="total">รวมทั้งหมด: {{ totalLuckyDraw }} Lucky Draw</h2>
+        <!-- Amount -->
+        <div class="mb-4">
+          <label class="block font-semibold mb-2"> จำนวนบัตร </label>
+          <input class="w-full rounded-xl px-4 py-3 bg-gray-50 font-semibold" type="number" min="1" v-model.number="ticketCount" />
+        </div>
+
+        <!-- Result Box -->
+        <div class="result-box rounded-xl text-center py-5 mt-4">
+          <p class="text-sm opacity-90 font-semibold">ผลลัพธ์ Lucky Draw ที่ได้รับ</p>
+          <p class="text-4xl font-bold mt-2">{{ totalLuckyDraw }}</p>
+        </div>
+        <div class="tooltip rounded-xl text-center py-5 mt-4">
+          <p class="tooltip-p">ⓘ Goods {{ formatPrice(grandTotal) }} / 600 = {{ luckyDrawFromTotal }} Lucky Draw</p>
+          <p class="tooltip-p">{{ selectedTicket }} x {{ ticketCount }} = {{ luckyDrawFromTicket }} Lucky Draw</p>
+        </div>
+      </div>
+
+      <!-- Point card -->
+      <div class="bg-white rounded-2xl shadow-lg p-6 space-y-6 flex-1">
+        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">Point Calculation</h2>
+
+        <!-- Total -->
+        <div class="mb-4">
+          <label class="block font-semibold mb-2"> ยอดรวม </label>
+          <div class="grand-total rounded-xl px-4 py-3 bg-gray-50 font-semibold">{{ formatPrice(grandTotal) }}</div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="mb-4">
+          <label class="block font-semibold mb-2"> รูปแบบการชำระเงิน </label>
+          <select class="w-full rounded-xl px-4 py-3 bg-gray-50 font-semibold appearance-none" v-model="selectedPayment" @change="(e) => e.target.blur()">
+            <option disabled value="">- เลือกรูปแบบการชำระเงิน -</option>
+            <option v-for="pay in paymentTypes" :key="pay.name" :value="pay.name">
+              {{ pay.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Result Box -->
+        <div class="result-box rounded-xl text-center py-5 mt-4">
+          <p class="text-sm opacity-90 font-semibold">จำนวน Point ที่ได้รับ</p>
+          <p class="text-4xl font-bold mt-2">{{ luckyDrawFromPayment }}</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -47,11 +69,49 @@
 import { defineProps, defineEmits, computed, ref } from "vue";
 import { watch, onMounted } from "vue";
 
+// payment type
+const paymentTypes = [
+  { name: "เงินสด x 3", multiplier: 3 },
+  { name: "QR Code x 2", multiplier: 2 },
+  { name: "บัตรเครดิต x 1", multiplier: 1 },
+];
+
+const selectedPayment = ref("");
+
+// load localStorage on mounted
+onMounted(() => {
+  const saved = localStorage.getItem("selectedPayment");
+  if (saved) {
+    selectedPayment.value = saved;
+  }
+});
+
+// save selected payment type to localStorage
+watch(selectedPayment, (newVal) => {
+  if (newVal) {
+    localStorage.setItem("selectedPayment", newVal);
+  }
+});
+
+// select payment type object
+const selectedPaymentObj = computed(() => paymentTypes.find((p) => p.name === selectedPayment.value));
+
+// point calculation
+const luckyDrawFromPayment = computed(() => {
+  const base = Math.floor((props.grandTotal || 0) / 600);
+  return selectedPaymentObj.value ? base * selectedPaymentObj.value.multiplier : 0;
+});
+
+// calculate total price format
+function formatPrice(price) {
+  return `${price.toLocaleString()} บาท`;
+}
+
 const tickets = [
-  { name: "Normal TICKET", luckyPerTicket: 0 },
-  { name: "Civil War TICKET", luckyPerTicket: 2 },
-  { name: "S TICKET", luckyPerTicket: 3 },
-  { name: "SS TICKET", luckyPerTicket: 5 },
+  { name: "NORMAL TICKET (+ 0)", luckyPerTicket: 0 },
+  { name: "WINTER TICKET (+ 2)", luckyPerTicket: 2 },
+  { name: "S TICKET (+ 3)", luckyPerTicket: 3 },
+  { name: "SS TICKET (+ 5)", luckyPerTicket: 5 },
 ];
 
 const selectedTicket = ref("");
@@ -91,6 +151,7 @@ onMounted(() => {
 const props = defineProps({
   show: Boolean,
   grandTotal: Number, // from OrderKoiiro.vue
+  grandTotal: Number,
 });
 
 const emit = defineEmits(["close"]);
@@ -111,10 +172,6 @@ const luckyDrawFromTotal = computed(() => {
 const totalLuckyDraw = computed(() => {
   return luckyDrawFromTicket.value + luckyDrawFromTotal.value;
 });
-
-function formatPrice(price) {
-  return `${price.toLocaleString()} ฿`;
-}
 </script>
 
 <style scoped>
@@ -129,13 +186,14 @@ function formatPrice(price) {
 }
 
 .modal-content {
+  gap: 20px;
   background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  min-width: 500px;
-  max-width: 90%;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  position: relative;
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .modal-close {
@@ -183,41 +241,47 @@ select {
   text-align: center;
 }
 
-input {
+input,
+select {
   text-align: center;
-  border: none;
-  border-bottom: 1px solid #370079;
-  outline: none;
-}
-
-input:focus {
-  border-bottom: 1px solid #370079;
-}
-
-td {
-  color: #7700f0;
-  border: #370079 1px solid;
-  font-weight: 600;
-}
-
-tr {
-  color: #7700f0;
-  border: #370079 1px solid;
-}
-
-th {
-  color: #ffffff;
-  background: #6500e4;
-  background: linear-gradient(90deg, rgba(101, 0, 228, 1) 15%, rgba(207, 3, 2, 1) 85%);
-  border: #370079 1px solid;
+  color: #70c0d8;
+  background-color: #f8fdff;
+  border: #70c0d8 1px solid;
 }
 
 h2 {
-  color: #cf0302;
+  color: #70c0d8;
+}
+
+label {
+  color: #1399c2;
+}
+
+.grand-total {
+  color: #70c0d8;
+  background-color: #f8fdff;
+  border: #70c0d8 1px solid;
+}
+.result-box {
+  color: #ffffff;
+  background: #70c0d8;
+  background: linear-gradient(90deg, rgba(112, 192, 216, 1) 0%, rgba(140, 230, 255, 1) 100%, rgba(112, 224, 255, 1) 50%);
+}
+
+.tooltip {
+  background: #ebf9ff;
+  /* border: #1399c2 1px solid; */
+}
+
+.tooltip-p {
+  color: #1399c2;
+  font-weight: 400;
+  font-size: 14px;
 }
 
 @media screen and (max-width: 768px) {
   .modal-content {
+    flex-direction: column;
     padding: 1rem;
     min-width: 95%;
     max-width: 90%;

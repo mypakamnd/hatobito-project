@@ -1,11 +1,13 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+@import "flowbite/src/themes/default";
 
 :root {
   font-family: "Anuphan", sans-serif;
   line-height: 1.5;
   font-weight: 200;
 
-  background-image: url("./assets/civil-war-bg.png");
+  background-image: url("./assets/watashi_background.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

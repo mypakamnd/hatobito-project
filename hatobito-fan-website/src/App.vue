@@ -14,15 +14,12 @@ const activeTab = computed(() => route.path);
 
 <template>
   <div class="card-container">
-    <!-- tap -->
     <!-- <div class="tabs-container">
       <button class="tab-button" :class="{ active: activeTab === '/' }" @click="goTo('/')">HatoBito</button>
       <button class="tab-button" :class="{ active: activeTab === '/order-angevil' }" @click="goTo('/order-angevil')">Angevil</button>
-    </div> -->
+    </div>  -->
 
-    <div class="tab-content">
-      <router-view />
-    </div>
+    <router-view />
   </div>
 </template>
 

@@ -1,17 +1,18 @@
 <template>
   <div class="civil-order-form">
-    <h1 class="text-xl font-bold mb-4">Declaration of Civil War Goods</h1>
+    <h1 class="text-xl font-bold">Watashi No Katachi</h1>
+    <h1 class="text-xl font-bold mb-4">❄ Goods ❄</h1>
 
     <div class="overflow-x-auto">
       <table class="w-full min-w-max text-sm">
         <thead class="bg-sky-300">
           <tr>
             <!-- Goods column on mobile desktop -->
-            <th class="px-4 py-2 hidden md:table-cell">Goods</th>
-            <th class="px-4 py-2">Member</th>
-            <th class="px-4 py-2">Amount</th>
-            <th class="px-4 py-2">Summary</th>
-            <th class="px-4 py-2 desktop-only">Delete</th>
+            <th class="px-6 py-2 hidden md:table-cell">Goods</th>
+            <th class="px-6 py-2">Member</th>
+            <th class="px-6 py-2">Amount</th>
+            <th class="px-6 py-2">Summary</th>
+            <th class="px-6 py-2 desktop-only">Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -53,7 +54,7 @@
 
             <!-- amount -->
             <td :data-label="'amount'">
-              <div class="flex items-center justify-center gap-1">
+              <div class="flex items-center justify-center gap-1 px-2">
                 <button type="button" @click="if (item.quantity > 1) item.quantity--;">-</button>
                 <input type="number" min="1" v-model.number="item.quantity" class="w-16 text-center" />
                 <button type="button" @click="item.quantity++">+</button>
@@ -96,13 +97,13 @@
 
     <div class="group-button">
       <button @click="addOrder" class="btn-click">+ เพิ่มรายการ</button>
-      <button @click="showModalLuckyDraw = true" class="btn-click">คำนวณ Lucky Draw</button>
-      <button @click="showModalPoint = true" class="btn-click">คำนวณ Point</button>
+      <button @click="showModalLuckyDraw = true" class="btn-click">คำนวณ Point และ Lucky Draw</button>
+      <!-- <button @click="showModalPoint = true" class="btn-click">คำนวณ Point</button> -->
       <!-- <button @click="openSummary = true" class="btn-click">สรุปรายการ</button> -->
     </div>
 
     <div class="div-a">
-      <a href="https://www.facebook.com/share/p/16smm1AWdL/" target="_blank" class="text-sm font-bold flex items-center gap-1">
+      <a href="https://www.facebook.com/share/p/17sejQ4Jzr/" target="_blank" class="text-sm font-bold flex items-center gap-1">
         Official Goods Sample<svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -171,20 +172,17 @@ watch(
 );
 
 const products = [
-  { name: "Badge", price: 150, memberCount: 0, memberType: "members" },
-  { name: "Yume Dake POSTER", price: 500, memberCount: 0, memberType: "members" },
-  { name: "Flickering Light POSTER", price: 500, memberCount: 0, memberType: "members" },
-  { name: "Yume Dake Member POSTER", price: 350, memberCount: 1, memberType: "yumeDake" },
-  { name: "Flickering Light Member POSTER", price: 350, memberCount: 1, memberType: "flickeringLight" },
-  { name: "Photoset Collection Vol.14", price: 250, memberCount: 0, memberType: "members" },
-  { name: "Cheki Box", price: 250, memberCount: 0, memberType: "members" },
-  { name: "Shot Glass", price: 200, memberCount: 0, memberType: "members" },
-  { name: "Hand Fan", price: 50, memberCount: 0, memberType: "members" },
-  { name: "Pin Logo", price: 150, memberCount: 0, memberType: "members" },
   { name: "Costume Keychain", price: 250, memberCount: 0, memberType: "members" },
-  { name: "Photo Card Collection", price: 200, memberCount: 0, memberType: "members" },
-  { name: "HatoBito Snap", price: 400, memberCount: 1, memberType: "members" },
-  { name: "HatoBito Mini Snap", price: 300, memberCount: 1, memberType: "members" },
+  { name: "Photoset", price: 250, memberCount: 0, memberType: "members" },
+  { name: "Badge", price: 150, memberCount: 1, memberType: "watashi" },
+  { name: "Member Standy Acrylic", price: 350, memberCount: 1, memberType: "watashi" },
+  { name: "Member Poster", price: 350, memberCount: 1, memberType: "watashi" },
+  { name: "Group Poster", price: 500, memberCount: 0, memberType: "members" },
+  { name: "T-Shirt", price: 690, memberCount: 0, memberType: "members" },
+  { name: "T-Shirt Special Edition", price: 690, memberCount: 0, memberType: "members" },
+  { name: "HatoBito Photo Card Collection Vol.3", price: 200, memberCount: 0, memberType: "members" },
+  { name: "Mini Snap", price: 300, memberCount: 1, memberType: "members" },
+  { name: "Snap", price: 400, memberCount: 1, memberType: "members" },
 ];
 
 const members = [
@@ -206,26 +204,17 @@ const members = [
   { id: 16, name: "Mobile" },
 ];
 
-const yumeDake = [
-  { id: 1, name: "Pchi" },
-  { id: 2, name: "Airi" },
-  { id: 3, name: "Smild" },
-  { id: 4, name: "View" },
-  { id: 5, name: "ElleElle" },
-  { id: 6, name: "Gorya" },
-  { id: 7, name: "Kana" },
-  { id: 8, name: "Nata" },
-];
-
-const flickeringLight = [
-  { id: 1, name: "Music" },
+const watashi = [
+  { id: 1, name: "Chelsea" },
   { id: 2, name: "Summer" },
-  { id: 3, name: "Punnhyaz" },
-  { id: 4, name: "Beam" },
-  { id: 5, name: "Chelsea" },
-  { id: 6, name: "Donut" },
-  { id: 7, name: "Milin" },
-  { id: 8, name: "Mobile" },
+  { id: 3, name: "Beam" },
+  { id: 4, name: "View" },
+  { id: 5, name: "Punnhyaz" },
+  { id: 6, name: "Smild" },
+  { id: 7, name: "Kana" },
+  { id: 8, name: "Milin" },
+  { id: 9, name: "Mobile" },
+  { id: 10, name: "Nata" },
 ];
 
 function addOrder() {
@@ -254,12 +243,11 @@ function formatPrice(price) {
   return `${price.toLocaleString()} ฿`;
 }
 
-// selcet member list from product
+// select member list from product
 function getMemberList(productName) {
   const product = products.find((p) => p.name === productName);
   if (!product) return [];
-  if (product.memberType === "yumeDake") return yumeDake;
-  if (product.memberType === "flickeringLight") return flickeringLight;
+  if (product.memberType === "watashi") return watashi;
   return members;
 }
 
@@ -273,62 +261,62 @@ table {
   width: 100%;
 }
 .civil-order-form {
+  width: 90%;
+  max-width: 1200px;
   margin: auto;
-  padding: 30px;
+  padding: 30px 0px;
   background: rgba(255, 255, 255);
   border-radius: 20px;
 }
 
 td {
-  color: #6500e4;
-  border: #370079 1px solid;
+  color: #70c0d8;
+  border: #70c0d8 1px solid;
   font-weight: 600;
 }
 
 tr {
-  color: #6500e4;
+  color: #ffffff;
   border: #370079 1px solid;
 }
 
 th {
-  color: #ffffff;
-  background: #6500e4;
-  background: linear-gradient(90deg, rgba(101, 0, 228, 1) 15%, rgba(207, 3, 2, 1) 85%);
-  border: #370079 1px solid;
+  color: #70c0d8;
+  background: #eff8fb;
+  border: #70c0d8 1px solid;
+  font-size: 16px;
 }
 
 h1 {
-  color: #cf0302;
+  color: #70c0d8;
   font-size: 28px;
 }
 
 .div-a {
   display: flex;
   justify-content: center;
-  color: #cf0302;
+  color: #70c0d8;
   margin-top: 20px;
 }
 
 .btn-click {
   color: #ffffff;
-  background: #6500e4;
-  background: linear-gradient(90deg, rgba(101, 0, 228, 1) 15%, rgba(207, 3, 2, 1) 85%);
+  background: #70c0d8;
   padding: 10px 20px;
   margin-right: 10px;
   font-weight: bold;
   border-radius: 5px;
-  border: #6500e4 2px solid;
+  border: #70c0d8 2px solid;
 }
 
 .btn-click:hover {
-  color: #f0faff;
-  background: #8b2bff;
-  background: linear-gradient(90deg, rgba(139, 43, 255, 1) 15%, rgba(255, 51, 51, 1) 85%);
+  color: #70c0d8;
+  background: #ffffff;
 }
 
 input {
   border: none;
-  border-bottom: 1px solid #6500e4;
+  border-bottom: 1px solid #b1d4e0;
   outline: none;
 }
 
@@ -352,13 +340,13 @@ input {
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #cf0302;
+  color: #70c0d8;
 }
 
 .delete-icon-desktop {
   width: 16px;
   height: 16px;
-  fill: #6500e4;
+  fill: #70c0d8;
   cursor: pointer;
 }
 
@@ -374,6 +362,7 @@ input {
 @media screen and (max-width: 768px) {
   .mobile-only {
     display: table-cell;
+    padding: 6px;
   }
   .desktop-only {
     display: none;
@@ -387,7 +376,7 @@ input {
   .delete-icon {
     width: 18px;
     height: 18px;
-    fill: #5c00b9;
+    fill: #70c0d8;
     cursor: pointer;
   }
 
@@ -407,21 +396,21 @@ input {
     text-align: center;
     margin: 0 auto;
     font-size: 16px;
-    color: #cf0302;
+    color: #70c0d8;
   }
 
   td[data-label="Summary"] {
     border: none;
-    color: #cf0302;
+    color: #70c0d8;
   }
 
   td[data-label="amount"] {
     border: none;
-    color: #cf0302;
+    color: #70c0d8;
   }
 
   td[data-label="Member"] {
-    color: #cf0302;
+    color: #70c0d8;
   }
 
   td.delete-cell {
@@ -442,12 +431,12 @@ input {
     padding-bottom: 10px;
     text-align: center;
     border: none;
-    color: #cf0302;
+    color: #70c0d8;
   }
 
   input {
     border: none;
-    border-bottom: 1px solid #cf0302;
+    border-bottom: 1px solid #70c0d8;
     outline: none;
   }
 
@@ -468,7 +457,7 @@ input {
 
   tr {
     margin-bottom: 1rem;
-    border: 1px solid #5c00b9;
+    border: 2px solid #70c0d8;
     border-radius: 10px;
     padding: 10px;
     background-color: #ffffff;
@@ -483,7 +472,7 @@ input {
     padding-bottom: 10px;
     text-align: center;
     border: none;
-    border-bottom: 1px solid #5c00b9;
+    border-bottom: 1px solid #70c0d8;
   }
 
   td::before {
@@ -494,7 +483,7 @@ input {
     white-space: nowrap;
     content: attr(data-label);
     font-weight: bold;
-    color: #5c00b9;
+    color: #99daee;
     text-transform: uppercase;
   }
 
@@ -518,11 +507,6 @@ input {
     display: flex;
     flex-direction: column;
     justify-content: center;
-  }
-
-  .btn-click:hover {
-    background: #6500e4;
-    background: linear-gradient(90deg, rgba(101, 0, 228, 1) 15%, rgba(207, 3, 2, 1) 85%);
   }
 
   select {
