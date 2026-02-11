@@ -1,9 +1,9 @@
 <template>
   <div v-if="show" class="modal-overlay" @click.self="close">
-    <div class="modal-content flex flex-col md:flex-row gap-6">
+    <div class="modal-content flex flex-col md:flex-row gap-4">
       <!-- Lucky Draw Card -->
-      <div class="bg-white rounded-2xl shadow-lg p-6 flex-1">
-        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">Lucky Draw Calculation</h2>
+      <div class="bg-white p-6 flex-1">
+        <h2 class="text-2xl font-bold text-center mb-6">❄ LUCKY DRAW ❄</h2>
 
         <!-- Select Ticket -->
         <div class="mb-4">
@@ -34,9 +34,11 @@
         </div>
       </div>
 
+      <div class="divider"></div>
+
       <!-- Point card -->
-      <div class="bg-white rounded-2xl shadow-lg p-6 space-y-6 flex-1">
-        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">Point Calculation</h2>
+      <div class="bg-white p-6 space-y-6 flex-1">
+        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">❄ POINT ❄</h2>
 
         <!-- Total -->
         <div class="mb-4">
@@ -58,7 +60,11 @@
         <!-- Result Box -->
         <div class="result-box rounded-xl text-center py-5 mt-4">
           <p class="text-sm opacity-90 font-semibold">จำนวน Point ที่ได้รับ</p>
-          <p class="text-4xl font-bold mt-2">{{ luckyDrawFromPayment }}</p>
+          <p class="text-4xl font-bold">{{ luckyDrawFromPayment }}</p>
+        </div>
+        <div class="tooltip rounded-xl text-center py-5 mt-4">
+          <p class="tooltip-p">ⓘ Goods {{ formatPrice(grandTotal) }} / 600 = {{ baseLuckyDraw }} point</p>
+          <p class="tooltip-p">ทุกการชำระด้วย{{ selectedPayment }} = {{ luckyDrawFromPayment }} point</p>
         </div>
       </div>
     </div>
@@ -72,7 +78,7 @@ import { watch, onMounted } from "vue";
 // payment type
 const paymentTypes = [
   { name: "เงินสด x 3", multiplier: 3 },
-  { name: "QR Code x 2", multiplier: 2 },
+  { name: "QR Code x 1", multiplier: 1 },
   { name: "บัตรเครดิต x 1", multiplier: 1 },
 ];
 
@@ -100,6 +106,10 @@ const selectedPaymentObj = computed(() => paymentTypes.find((p) => p.name === se
 const luckyDrawFromPayment = computed(() => {
   const base = Math.floor((props.grandTotal || 0) / 600);
   return selectedPaymentObj.value ? base * selectedPaymentObj.value.multiplier : 0;
+});
+
+const baseLuckyDraw = computed(() => {
+  return Math.floor((props.grandTotal || 0) / 600);
 });
 
 // calculate total price format
@@ -186,13 +196,13 @@ const totalLuckyDraw = computed(() => {
 }
 
 .modal-content {
-  gap: 20px;
+  gap: 10px;
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
   width: 100%;
   max-width: 900px;
-  max-height: 90vh;
+  max-height: 70vh;
   overflow-y: auto;
 }
 
@@ -274,12 +284,19 @@ label {
 }
 
 .tooltip-p {
-  color: #1399c2;
+  color: #70c0d8;
   font-weight: 400;
   font-size: 14px;
 }
 
-@media screen and (max-width: 768px) {
+.divider {
+  width: 1px;
+  background: #70c0d8;
+  margin: 0 20px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 767px) {
   .modal-content {
     flex-direction: column;
     padding: 1rem;
@@ -291,6 +308,17 @@ label {
   .draw-table td {
     padding: 8px 8px;
     text-align: center;
+  }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    margin: 20px 0;
+    flex-shrink: 0;
+  }
+
+  .tooltip-p {
+    font-size: 12px;
   }
 }
 </style>

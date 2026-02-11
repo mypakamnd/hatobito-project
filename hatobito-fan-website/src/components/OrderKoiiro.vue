@@ -20,7 +20,7 @@
             <!-- goods -->
             <td class="px-2 py-2 block md:table-cell" :data-label="'สินค้า'">
               <select v-model="item.product" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1">
-                <option disabled value="">Select Goods</option>
+                <option disabled value="">- Select Goods -</option>
                 <option v-for="product in products" :key="product.name" :value="product.name">
                   {{ product.name }}
                 </option>
@@ -44,8 +44,8 @@
 
             <!-- member on mobile -->
             <td v-if="requiresMemberCount(item.product) > 0" class="mobile-only" data-label="Member">
-              <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded pr-10">
-                <option disabled value="">- select member -</option>
+              <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded">
+                <option disabled value="">- select -</option>
                 <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
                   {{ member.name }}
                 </option>
@@ -426,7 +426,6 @@ input {
 
   .grand-total {
     position: relative;
-    padding-left: 30%;
     padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -515,6 +514,8 @@ input {
 
   select {
     text-align: end;
+    width: 85%;
+    padding-right: 4px;
   }
 }
 
