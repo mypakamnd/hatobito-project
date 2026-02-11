@@ -134,7 +134,7 @@ const showModalLuckyDraw = ref(false);
 const showSummaryModal = ref(false);
 
 // If version mismatch, clear localStorage
-const APP_VERSION = "1.0.1";
+const APP_VERSION = "1.0.2";
 
 const grandTotal = computed(() => {
   return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);

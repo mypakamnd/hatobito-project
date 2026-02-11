@@ -84,8 +84,20 @@ const paymentTypes = [
 
 const selectedPayment = ref("");
 
+// If version mismatch, clear localStorage
+const APP_VERSION = "1.0.2";
+
 // load localStorage on mounted
 onMounted(() => {
+  const savedVersion = localStorage.getItem("app_version");
+
+  if (savedVersion !== APP_VERSION) {
+    // If version mismatch, clear localStorage
+    localStorage.clear();
+
+    localStorage.setItem("app_version", APP_VERSION);
+  }
+
   const saved = localStorage.getItem("selectedPayment");
   if (saved) {
     selectedPayment.value = saved;
