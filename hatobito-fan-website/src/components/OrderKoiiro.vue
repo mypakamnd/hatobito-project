@@ -4,7 +4,7 @@
     <h1 class="text-xl font-bold mb-4">❄ Goods ❄</h1>
 
     <div class="overflow-x-auto">
-      <table class="w-full min-w-max text-sm">
+      <table class="text-sm">
         <thead class="bg-sky-300">
           <tr>
             <!-- Goods column on mobile desktop -->
@@ -12,7 +12,7 @@
             <th class="px-6 py-2">Member</th>
             <th class="px-6 py-2">Amount</th>
             <th class="px-6 py-2">Summary</th>
-            <th class="px-6 py-2 desktop-only">Delete</th>
+            <th class="px-6 py-2 desktop-only">Manage</th>
           </tr>
         </thead>
         <tbody>
@@ -44,7 +44,7 @@
 
             <!-- member on mobile -->
             <td v-if="requiresMemberCount(item.product) > 0" class="mobile-only" data-label="Member">
-              <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
+              <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded pr-10">
                 <option disabled value="">- select member -</option>
                 <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
                   {{ member.name }}
@@ -69,16 +69,16 @@
             <!-- delete row -->
             <td class="delete-cell px-2 py-2 text-center block md:table-cell relative">
               <button class="desktop-only text-red-500 hover:text-red-700" @click="removeOrder(index)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="delete-icon-desktop" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="delete-icon-desktop" viewBox="0 0 16 16">
                   <path
-                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
                   />
                 </svg>
               </button>
               <button class="mobile-only delete-icon" @click="removeOrder(index)">
-                <svg xmlns="http://www.w3.org/2000/svg" class="delete-icon" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
                   <path
-                    d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"
+                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"
                   />
                 </svg>
               </button>
@@ -97,7 +97,7 @@
 
     <div class="group-button">
       <button @click="addOrder" class="btn-click">+ เพิ่มรายการ</button>
-      <button @click="showModalLuckyDraw = true" class="btn-click">คำนวณ Point และ Lucky Draw</button>
+      <button @click="showModalLuckyDraw = true" class="btn-click">Point และ Lucky Draw</button>
       <!-- <button @click="showModalPoint = true" class="btn-click">คำนวณ Point</button> -->
       <!-- <button @click="openSummary = true" class="btn-click">สรุปรายการ</button> -->
     </div>
@@ -340,13 +340,13 @@ input {
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #70c0d8;
+  color: #d87070;
 }
 
 .delete-icon-desktop {
-  width: 16px;
-  height: 16px;
-  fill: #70c0d8;
+  width: 18px;
+  height: 18px;
+  fill: #d87070;
   cursor: pointer;
 }
 
@@ -374,9 +374,10 @@ input {
   }
 
   .delete-icon {
-    width: 18px;
-    height: 18px;
-    fill: #70c0d8;
+    width: 16px;
+    height: 16px;
+    bottom: 18px;
+    fill: #d87070;
     cursor: pointer;
   }
 
@@ -425,7 +426,7 @@ input {
 
   .grand-total {
     position: relative;
-    padding-left: 35%;
+    padding-left: 30%;
     padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -461,12 +462,13 @@ input {
     border-radius: 10px;
     padding: 10px;
     background-color: #ffffff;
-    max-width: 310px;
+
+    width: 300px;
   }
 
   td {
     position: relative;
-    padding-left: 35%;
+    padding-left: 8rem;
     padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -485,6 +487,7 @@ input {
     font-weight: bold;
     color: #99daee;
     text-transform: uppercase;
+    width: 7rem;
   }
 
   td:last-child {
@@ -493,6 +496,7 @@ input {
 
   .civil-order-form {
     margin: auto;
+    width: 100%;
     padding: 15px 0px 0px 0px;
   }
 
@@ -510,7 +514,19 @@ input {
   }
 
   select {
-    text-align: center;
+    text-align: end;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  tr {
+    width: 260px;
+  }
+
+  .delete-icon {
+    width: 14px;
+    height: 14px;
+    bottom: 20px;
   }
 }
 </style>
