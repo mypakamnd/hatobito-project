@@ -24,9 +24,9 @@
         </div>
 
         <!-- Result Box -->
-        <div class="result-box rounded-xl text-center py-5 mt-4">
+        <div class="result-box rounded-xl text-center py-5">
           <p class="text-sm opacity-90 font-semibold">ผลลัพธ์ Lucky Draw ที่ได้รับ</p>
-          <p class="text-4xl font-bold mt-2">{{ totalLuckyDraw }}</p>
+          <p class="text-4xl font-bold">{{ totalLuckyDraw }}</p>
         </div>
         <div class="tooltip rounded-xl text-center py-5 mt-4">
           <p class="tooltip-p">ⓘ Goods {{ formatPrice(grandTotal) }} / 600 = {{ luckyDrawFromTotal }} Lucky Draw</p>
@@ -58,13 +58,35 @@
         </div>
 
         <!-- Result Box -->
-        <div class="result-box rounded-xl text-center py-5 mt-4">
+        <div class="result-box rounded-xl text-center py-5 mb-0">
           <p class="text-sm opacity-90 font-semibold">จำนวน Point ที่ได้รับ</p>
           <p class="text-4xl font-bold">{{ luckyDrawFromPayment }}</p>
         </div>
-        <div class="tooltip rounded-xl text-center py-5 mt-4">
+        <div class="tooltip rounded-xl text-center py-5 px-5 mt-4">
           <p class="tooltip-p">ⓘ Goods {{ formatPrice(grandTotal) }} / 600 = {{ baseLuckyDraw }} point</p>
           <p class="tooltip-p">ทุกการชำระด้วย{{ selectedPayment }} = {{ luckyDrawFromPayment }} point</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Postcard -->
+      <div class="bg-white p-6 space-y-6 flex-1">
+        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">❄ POSTCARD ❄</h2>
+
+        <!-- Total -->
+        <div class="mb-4">
+          <label class="block font-semibold mb-2"> ยอดรวม </label>
+          <div class="grand-total rounded-xl px-4 py-3 bg-gray-50 font-semibold">{{ formatPrice(grandTotal) }}</div>
+        </div>
+
+        <!-- Result Box -->
+        <div class="result-box rounded-xl text-center py-5 mb-0">
+          <p class="text-sm opacity-90 font-semibold">จำนวน Postcard ที่ได้รับ</p>
+          <p class="text-4xl font-bold">{{ postcardCal }}</p>
+        </div>
+        <div class="tooltip rounded-xl text-center py-5 px-5 mt-4">
+          <p class="tooltip-p">ⓘ ทุก ๆ การซื้อ 1,000 บาทขึ้นไป สุ่มรับ Postcard 1 ใบ (มีเมมเบอร์ละ 1 แบบ / แบบกลุ่ม 1 แบบ รวมทั้งหมด 10 แบบ)</p>
         </div>
       </div>
     </div>
@@ -122,6 +144,10 @@ const luckyDrawFromPayment = computed(() => {
 
 const baseLuckyDraw = computed(() => {
   return Math.floor((props.grandTotal || 0) / 600);
+});
+
+const postcardCal = computed(() => {
+  return Math.floor((props.grandTotal || 0) / 1000);
 });
 
 // calculate total price format
@@ -208,12 +234,11 @@ const totalLuckyDraw = computed(() => {
 }
 
 .modal-content {
-  gap: 10px;
+  gap: 8px;
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
-  width: 100%;
-  max-width: 900px;
+  width: 70%;
   max-height: 70vh;
   overflow-y: auto;
 }

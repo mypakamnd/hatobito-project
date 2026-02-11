@@ -281,7 +281,7 @@ tr {
 
 th {
   color: #70c0d8;
-  background: #eff8fb;
+  background: #e7f8ff;
   border: #70c0d8 1px solid;
   font-size: 16px;
 }
