@@ -98,8 +98,6 @@
     <div class="group-button">
       <button @click="addOrder" class="btn-click">+ เพิ่มรายการ</button>
       <button @click="showModalLuckyDraw = true" class="btn-click">Point และ Lucky Draw</button>
-      <!-- <button @click="showModalPoint = true" class="btn-click">คำนวณ Point</button> -->
-      <!-- <button @click="openSummary = true" class="btn-click">สรุปรายการ</button> -->
     </div>
 
     <div class="div-a">
@@ -123,7 +121,6 @@
       </a>
     </div>
     <LuckydrawModal :show="showModalLuckyDraw" :grand-total="grandTotal" @close="showModalLuckyDraw = false" />
-    <PointSummaryMadal :show="showModalPoint" :grand-total="pointTotal" @close="showModalPoint = false" />
     <!-- <OrderSummaryModal :show="showSummaryModal" :orders="orders" @close="closeSummary" /> -->
   </div>
 </template>
@@ -132,12 +129,12 @@
 import { ref, watch, onMounted } from "vue";
 import { computed } from "vue";
 import LuckydrawModal from "./LuckydrawModal.vue";
-import PointSummaryMadal from "./PointSummaryMadal.vue";
-// import OrderSummaryModal from "./OrderSummaryModal.vue";
 
 const showModalLuckyDraw = ref(false);
-const showModalPoint = ref(false);
 const showSummaryModal = ref(false);
+
+// If version mismatch, clear localStorage
+const APP_VERSION = "1.0.1";
 
 const grandTotal = computed(() => {
   return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);
@@ -149,14 +146,16 @@ const pointTotal = computed(() => {
 
 const orders = ref([{ product: "", member1: "", quantity: 1 }]);
 
-// const openSummary = () => {
-//   showSummaryModal.value = true;
-// };
-// const closeSummary = () => {
-//   showSummaryModal.value = false;
-// };
-
 onMounted(() => {
+  const savedVersion = localStorage.getItem("app_version");
+
+  if (savedVersion !== APP_VERSION) {
+    // If version mismatch, clear localStorage
+    localStorage.clear();
+
+    localStorage.setItem("app_version", APP_VERSION);
+  }
+
   const savedOrders = localStorage.getItem("orders");
   if (savedOrders) {
     orders.value = JSON.parse(savedOrders);
