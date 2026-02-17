@@ -35,6 +35,6 @@ body {
 }
 
 select {
-  -webkit-appearance: menulist;
-  appearance: auto;
+  -webkit-appearance: none;
+  appearance: none;
 }

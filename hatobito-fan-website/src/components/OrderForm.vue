@@ -31,7 +31,7 @@
             <td class="desktop-only px-2 py-2" data-label="Member">
               <template v-if="requiresMemberCount(item.product) > 0">
                 <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
-                  <option disabled value="">- select member -</option>
+                  <option disabled value="">- Select Member -</option>
                   <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
                     {{ member.name }}
                   </option>
@@ -45,7 +45,7 @@
             <!-- member on mobile -->
             <td v-if="requiresMemberCount(item.product) > 0" class="mobile-only" data-label="Member">
               <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded">
-                <option disabled value="">- select -</option>
+                <option disabled value="">- Select Member -</option>
                 <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
                   {{ member.name }}
                 </option>
@@ -357,6 +357,14 @@ input {
   display: table-cell;
 }
 
+select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%2370c0d8' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 24px;
+  padding-right: 30px;
+}
+
 /* Mobile */
 @media screen and (max-width: 768px) {
   .mobile-only {
@@ -388,15 +396,24 @@ input {
   }
 
   td[data-label="สินค้า"]::before {
+    text-align: center;
     content: none !important;
   }
 
   td[data-label="สินค้า"] select {
     width: 100%;
     text-align: center;
+    text-align-last: center; /* สำคัญมากบน iOS */
+    padding: 0;
     margin: 0 auto;
     font-size: 16px;
     color: #70c0d8;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+
+    background-color: #fff;
   }
 
   td[data-label="Summary"] {
@@ -411,6 +428,15 @@ input {
 
   td[data-label="Member"] {
     color: #70c0d8;
+    padding-left: 0 !important;
+    text-align: center;
+  }
+
+  td[data-label="Member"] select {
+    width: 100%;
+    padding-right: 2rem;
+    text-align: end;
+    text-align-last: end; /* for iOS */
   }
 
   td.delete-cell {
@@ -515,13 +541,16 @@ input {
   select {
     text-align: right;
     width: 100%;
-    padding-right: 2rem;
-    -webkit-appearance: menulist;
-    appearance: auto;
+    padding-right: 3rem;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    font-size: 16px;
   }
 }
 
-@media screen and (max-width: 380px) {
+@media screen and (max-width: 375px) {
   tr {
     width: 260px;
   }
@@ -530,6 +559,10 @@ input {
     width: 14px;
     height: 14px;
     bottom: 20px;
+  }
+
+  .card-container {
+    padding: 10px;
   }
 }
 </style>

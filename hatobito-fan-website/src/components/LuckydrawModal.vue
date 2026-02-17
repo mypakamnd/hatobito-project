@@ -238,7 +238,7 @@ const totalLuckyDraw = computed(() => {
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
-  width: 70%;
+  width: 80%;
   max-height: 70vh;
   overflow-y: auto;
 }
@@ -285,9 +285,11 @@ const totalLuckyDraw = computed(() => {
 }
 
 select {
-  text-align: center;
-  -webkit-appearance: menulist;
-  appearance: auto;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%2370c0d8' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 24px;
+  padding-right: 30px;
 }
 
 input,
@@ -296,8 +298,10 @@ select {
   color: #70c0d8;
   background-color: #f8fdff;
   border: #70c0d8 1px solid;
-  -webkit-appearance: menulist;
   appearance: auto;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align-last: center; /* สำคัญมากบน iOS */
 }
 
 h2 {
