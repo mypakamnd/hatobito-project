@@ -286,6 +286,8 @@ const totalLuckyDraw = computed(() => {
 
 select {
   text-align: center;
+  -webkit-appearance: menulist;
+  appearance: auto;
 }
 
 input,
@@ -294,6 +296,8 @@ select {
   color: #70c0d8;
   background-color: #f8fdff;
   border: #70c0d8 1px solid;
+  -webkit-appearance: menulist;
+  appearance: auto;
 }
 
 h2 {

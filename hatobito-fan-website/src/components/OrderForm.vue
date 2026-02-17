@@ -515,6 +515,8 @@ input {
     text-align: end;
     width: 85%;
     padding-right: 4px;
+    -webkit-appearance: menulist;
+    appearance: auto;
   }
 }
 
