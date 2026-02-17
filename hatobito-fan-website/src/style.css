@@ -33,3 +33,8 @@ body {
   padding: 20px;
   text-align: center;
 }
+
+select {
+  -webkit-appearance: menulist;
+  appearance: auto;
+}
