@@ -448,6 +448,8 @@ input {
   tr {
     display: block;
     margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   thead {
@@ -460,8 +462,7 @@ input {
     border-radius: 10px;
     padding: 10px;
     background-color: #ffffff;
-
-    width: 300px;
+    width: 100%;
   }
 
   td {
@@ -512,9 +513,9 @@ input {
   }
 
   select {
-    text-align: end;
-    width: 85%;
-    padding-right: 4px;
+    text-align: right;
+    width: 100%;
+    padding-right: 2rem;
     -webkit-appearance: menulist;
     appearance: auto;
   }
