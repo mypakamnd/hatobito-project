@@ -20,7 +20,11 @@
         <!-- Amount -->
         <div class="mb-4">
           <label class="block font-semibold mb-2"> จำนวนบัตร </label>
-          <input class="w-full rounded-xl px-4 py-3 bg-gray-50 font-semibold" type="number" min="1" v-model.number="ticketCount" />
+          <div class="input-amount w-full rounded-xl px-4 py-3 bg-gray-50 font-semibold">
+            <button type="button" class="amount-button" @click="if (ticketCount > 1) ticketCount--;">-</button>
+            <input type="number" min="1" v-model.number="ticketCount" />
+            <button type="button" class="amount-button" @click="ticketCount++">+</button>
+          </div>
         </div>
 
         <!-- Result Box -->
@@ -292,7 +296,6 @@ select {
   padding-right: 30px;
 }
 
-input,
 select {
   text-align: center;
   color: #70c0d8;
@@ -302,6 +305,31 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   text-align-last: center; /* สำคัญมากบน iOS */
+}
+
+.input-amount {
+  text-align: center;
+  color: #70c0d8;
+  background-color: #f8fdff;
+  border: #70c0d8 1px solid;
+  appearance: auto;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align-last: center; /* สำคัญมากบน iOS */
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.amount-button {
+  font-size: 20px;
+}
+
+input {
+  width: 60px;
 }
 
 h2 {

@@ -55,9 +55,9 @@
             <!-- amount -->
             <td :data-label="'amount'">
               <div class="flex items-center justify-center gap-1 px-2">
-                <button type="button" @click="if (item.quantity > 1) item.quantity--;">-</button>
+                <button type="button" class="amount-button" @click="if (item.quantity > 1) item.quantity--;">-</button>
                 <input type="number" min="1" v-model.number="item.quantity" class="w-16 text-center" />
-                <button type="button" @click="item.quantity++">+</button>
+                <button type="button" class="amount-button" @click="item.quantity++">+</button>
               </div>
             </td>
 
@@ -319,6 +319,12 @@ input {
   outline: none;
 }
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .group-button {
   margin: 20px 0px 10px 0px;
   display: flex;
@@ -363,6 +369,10 @@ select {
   background-position: right 8px center;
   background-size: 24px;
   padding-right: 30px;
+}
+
+.amount-button {
+  font-size: 20px;
 }
 
 /* Mobile */
