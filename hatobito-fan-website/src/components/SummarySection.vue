@@ -41,16 +41,16 @@
     <table class="summary-table">
       <tbody class="summary-tbody">
         <tr class="summary-tr">
-          <td class="summary-td-left">Mini Snap / Snap Total</td>
-          <td class="summary-td-right">{{ formatPrice(snapTotal) }}</td>
+          <td class="calculate-td-left">Mini Snap / Snap Total</td>
+          <td class="calculate-td-right">{{ formatPrice(snapTotal) }}</td>
         </tr>
         <tr class="summary-tr">
-          <td class="summary-td-left">Goods Total</td>
-          <td class="summary-td-right">{{ formatPrice(goodsTotal) }}</td>
+          <td class="calculate-td-left">Goods Total</td>
+          <td class="calculate-td-right">{{ formatPrice(goodsTotal) }}</td>
         </tr>
         <tr class="summary-tr">
-          <td class="summary-td-left" style="color: #d87070">Goods Discount</td>
-          <td class="summary-td-right" style="color: #d87070">- {{ formatPrice(goodsDiscount) }}</td>
+          <td class="calculate-td-left" style="color: #d87070">Goods Discount</td>
+          <td class="calculate-td-right" style="color: #d87070">- {{ formatPrice(goodsDiscount) }}</td>
         </tr>
       </tbody>
     </table>
@@ -60,14 +60,14 @@
     <table class="summary-table">
       <tbody class="summary-tbody">
         <tr class="summary-tr">
-          <td class="summary-td-left">Final Total</td>
-          <td class="summary-td-right">{{ formatPrice(finalTotal) }}</td>
+          <td class="calculate-td-left">Final Total</td>
+          <td class="calculate-td-right">{{ formatPrice(finalTotal) }}</td>
         </tr>
       </tbody>
     </table>
 
     <div class="tooltip rounded-xl text-center py-5 px-5 mt-4">
-      <p class="tooltip-p">ⓘ ส่วนลดจาก Tier ใช้ได้เฉพาะสินค้าประเภท Goods เท่านั้น Snap / Mini Snap จะไม่ได้รับส่วนลดจาก Tier</p>
+      <p class="tooltip-p">ⓘ ส่วนลดจาก Tier ใช้ได้เฉพาะสินค้าประเภท Goods เท่านั้น Snap / Mini Snap จะไม่ได้รับส่วนลด</p>
     </div>
 
     <div class="group-button">
@@ -284,12 +284,21 @@ select {
   font-size: 16px;
 }
 
-.summary-td-right {
+.summary-td-right,
+.calculate-td-right {
   text-align: right;
 }
 
-.summary-td-left {
+.summary-td-left,
+.calculate-td-left {
   text-align: left;
+}
+
+.calculate-td-left,
+.calculate-td-right {
+  padding: 2px;
+  border: none;
+  font-size: 16px;
 }
 
 .dashed-custom {
