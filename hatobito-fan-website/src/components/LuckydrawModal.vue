@@ -101,6 +101,14 @@
 import { defineProps, defineEmits, computed, ref } from "vue";
 import { watch, onMounted } from "vue";
 
+const props = defineProps({
+  show: Boolean,
+  grandTotal: {
+    type: Number,
+    default: 0,
+  },
+});
+
 // payment type
 const paymentTypes = [
   { name: "เงินสด x 3", multiplier: 3 },
@@ -111,7 +119,7 @@ const paymentTypes = [
 const selectedPayment = ref("");
 
 // If version mismatch, clear localStorage
-const APP_VERSION = "1.0.2";
+const APP_VERSION = "1.0.3";
 
 // load localStorage on mounted
 onMounted(() => {
@@ -198,12 +206,6 @@ onMounted(() => {
       console.error("load local storage failed.", e);
     }
   }
-});
-
-const props = defineProps({
-  show: Boolean,
-  grandTotal: Number, // from OrderKoiiro.vue
-  grandTotal: Number,
 });
 
 const emit = defineEmits(["close"]);

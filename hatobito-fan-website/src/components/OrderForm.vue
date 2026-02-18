@@ -1,7 +1,7 @@
 <template>
   <div class="civil-order-form">
     <h1 class="text-xl font-bold">Watashi No Katachi</h1>
-    <h1 class="text-xl font-bold mb-4">❄ Goods ❄</h1>
+    <h1 class="text-xl font-bold mb-4">❄ Goods Form ❄</h1>
 
     <div class="overflow-x-auto">
       <table class="text-sm">
@@ -18,8 +18,8 @@
         <tbody>
           <tr v-for="(item, index) in orders" :key="index" class="md:table-row">
             <!-- goods -->
-            <td class="px-2 py-2 block md:table-cell" :data-label="'สินค้า'">
-              <select v-model="item.product" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1">
+            <td class="px-2 py-2 block md:table-cell" :data-label="'goods'">
+              <select v-model="item.product" @change="onProductChange(item)" class="w-full rounded px-2 py-1">
                 <option disabled value="">- Select Goods -</option>
                 <option v-for="product in products" :key="product.name" :value="product.name">
                   {{ product.name }}
@@ -96,9 +96,13 @@
     </div>
 
     <div class="group-button">
-      <button @click="addOrder" class="btn-click">+ เพิ่มรายการ</button>
-      <button @click="showModalLuckyDraw = true" class="btn-click">Point และ Lucky Draw</button>
+      <button @click="addOrder" class="btn-click">+ add goods</button>
     </div>
+
+    <div class="divider"></div>
+
+    <h1 class="text-xl font-bold">❄ Summary Section ❄</h1>
+    <SummarySection :orders="orders" />
 
     <div class="div-a">
       <a href="https://www.facebook.com/share/p/17sejQ4Jzr/" target="_blank" class="text-sm font-bold flex items-center gap-1">
@@ -120,21 +124,15 @@
         </svg>
       </a>
     </div>
-    <LuckydrawModal :show="showModalLuckyDraw" :grand-total="grandTotal" @close="showModalLuckyDraw = false" />
-    <!-- <OrderSummaryModal :show="showSummaryModal" :orders="orders" @close="closeSummary" /> -->
   </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
-import { computed } from "vue";
-import LuckydrawModal from "./LuckydrawModal.vue";
-
-const showModalLuckyDraw = ref(false);
-const showSummaryModal = ref(false);
+import { ref, watch, onMounted, computed } from "vue";
+import SummarySection from "./SummarySection.vue";
 
 // If version mismatch, clear localStorage
-const APP_VERSION = "1.0.2";
+const APP_VERSION = "1.0.3";
 
 const grandTotal = computed(() => {
   return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);
@@ -144,7 +142,7 @@ const pointTotal = computed(() => {
   return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);
 });
 
-const orders = ref([{ product: "", member1: "", quantity: 1 }]);
+const orders = ref([{ product: "", member1: "", quantity: 1, price: 0, goodsType: "", memberCount: 0 }]);
 
 onMounted(() => {
   const savedVersion = localStorage.getItem("app_version");
@@ -171,17 +169,17 @@ watch(
 );
 
 const products = [
-  { name: "Costume Keychain", price: 250, memberCount: 0, memberType: "members" },
-  { name: "Photoset", price: 250, memberCount: 0, memberType: "members" },
-  { name: "Badge", price: 150, memberCount: 1, memberType: "watashi" },
-  { name: "Member Standy Acrylic", price: 350, memberCount: 1, memberType: "watashi" },
-  { name: "Member Poster", price: 350, memberCount: 1, memberType: "watashi" },
-  { name: "Group Poster", price: 500, memberCount: 0, memberType: "members" },
-  { name: "T-Shirt", price: 690, memberCount: 0, memberType: "members" },
-  { name: "T-Shirt Special Edition", price: 690, memberCount: 0, memberType: "members" },
-  { name: "HatoBito Photo Card Collection Vol.3", price: 200, memberCount: 0, memberType: "members" },
-  { name: "Mini Snap", price: 300, memberCount: 1, memberType: "members" },
-  { name: "Snap", price: 400, memberCount: 1, memberType: "members" },
+  { name: "Costume Keychain", price: 250, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "Photoset", price: 250, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "Badge", price: 150, memberCount: 1, memberType: "watashi", goodsType: "goods" },
+  { name: "Member Standy Acrylic", price: 350, memberCount: 1, memberType: "watashi", goodsType: "goods" },
+  { name: "Member Poster", price: 350, memberCount: 1, memberType: "watashi", goodsType: "goods" },
+  { name: "Group Poster", price: 500, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "T-Shirt", price: 690, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "T-Shirt Special Edition", price: 690, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "Photo Card Collection Vol.3", price: 200, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "Mini Snap", price: 300, memberCount: 1, memberType: "members", goodsType: "snap" },
+  { name: "Snap", price: 400, memberCount: 1, memberType: "members", goodsType: "snap" },
 ];
 
 const members = [
@@ -217,7 +215,21 @@ const watashi = [
 ];
 
 function addOrder() {
-  orders.value.push({ product: "", member1: "", quantity: 1 });
+  orders.value.push({ product: "", member1: "", quantity: 1, price: 0, goodsType: "", memberCount: 0 });
+}
+function onProductChange(item) {
+  const selected = products.find((p) => p.name === item.product);
+
+  if (selected) {
+    item.price = selected.price;
+    item.goodsType = selected.goodsType;
+    item.memberCount = selected.memberCount;
+    item.member1 = "";
+  } else {
+    item.price = 0;
+    item.goodsType = "";
+    item.memberCount = 0;
+  }
 }
 
 function removeOrder(index) {
@@ -295,7 +307,7 @@ h1 {
   display: flex;
   justify-content: center;
   color: #70c0d8;
-  margin-top: 20px;
+  margin: 20px 0px;
 }
 
 .btn-click {
@@ -375,6 +387,14 @@ select {
   font-size: 20px;
 }
 
+.divider {
+  background: #70c0d8;
+  width: 100%;
+  height: 1px;
+  margin: 40px 0;
+  flex-shrink: 0;
+}
+
 /* Mobile */
 @media screen and (max-width: 768px) {
   .mobile-only {
@@ -398,19 +418,19 @@ select {
     cursor: pointer;
   }
 
-  td[data-label="สินค้า"] {
+  td[data-label="goods"] {
     display: block !important;
     width: 100% !important;
     text-align: center;
     padding: 0.5rem 0;
   }
 
-  td[data-label="สินค้า"]::before {
+  td[data-label="goods"]::before {
     text-align: center;
     content: none !important;
   }
 
-  td[data-label="สินค้า"] select {
+  td[data-label="goods"] select {
     width: 100%;
     text-align: center;
     text-align-last: center; /* สำคัญมากบน iOS */
