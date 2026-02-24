@@ -25,7 +25,7 @@
     </div>
 
     <!-- PHASE 1 : BET -->
-    <div v-if="gameState === 'bet'" class="section">
+    <div class="section">
       <label class="put-coin block font-semibold">วางเดิมพัน ( 1-5 G-D! Coin )</label>
 
       <div class="row">
@@ -36,15 +36,22 @@
     </div>
 
     <!-- PHASE 2 : DRAW -->
-    <div v-if="gameState === 'draw' || gameState === 'result'" class="section">
+    <div class="section">
       <p class="highlight">◉ เดิมพันแล้ว {{ currentBet }} G-D ◉</p>
       <!-- <p class="select-card" v-if="gameState === 'draw'">เลือกการ์ด 1 ใบ</p> -->
 
-      <div class="card-area">
-        <div v-for="(card, index) in cards" :key="index" class="card-wrapper" @click="pickCard(card)">
-          <div class="card" :class="{ flipped: card.flipped }">
-            <div class="front">?</div>
-            <div class="back">{{ card.name }}</div>
+      <div class="card-area-wrapper">
+        <!-- Overlay Lock -->
+        <div v-if="!canPickCard" class="card-lock">
+          <p>กดยืนยันการเดิมพันหรือเล่นอีกครั้ง</p>
+        </div>
+
+        <div class="card-area">
+          <div v-for="(card, index) in cards" :key="index" class="card-wrapper" @click="pickCard(card)">
+            <div class="card" :class="{ flipped: card.flipped }">
+              <div class="front">?</div>
+              <div class="back">{{ card.name }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -146,6 +153,7 @@ function handleTopUp() {
 
 function confirmBet() {
   if (!isValidBet.value) return;
+
   if (gdCoin.value < betAmount.value) {
     betError.value = "เหรียญไม่พอ";
     return;
@@ -154,19 +162,26 @@ function confirmBet() {
   currentBet.value = betAmount.value;
   gdCoin.value -= currentBet.value;
 
+  gameState.value = "draw";
+}
+
+/* ---------------- DRAW ---------------- */
+
+const canPickCard = computed(() => {
+  return gameState.value === "draw";
+});
+
+function initCards() {
   const drawn = [...shuffle(mainDeck).slice(0, 2), ...shuffle(itemDeck).slice(0, 2)];
 
   cards.value = shuffle(drawn).map((c) => ({
     name: c,
     flipped: false,
   }));
-
-  gameState.value = "draw";
 }
 
-/* ---------------- DRAW ---------------- */
-
 function pickCard(cardObj) {
+  if (!canPickCard.value) return;
   if (gameState.value !== "draw") return;
 
   cardObj.flipped = true;
@@ -237,8 +252,9 @@ function pickCard(cardObj) {
 
 function resetGame() {
   currentBet.value = 0;
-  cards.value = [];
   resultMessage.value = "";
+
+  initCards(); // play and shuffle new cards
   gameState.value = "bet";
 }
 
@@ -256,7 +272,7 @@ function clearGameData() {
   goldCoin.value = 0;
   history.value = [];
   currentBet.value = 0;
-  cards.value = [];
+  //   cards.value = [];
   resultMessage.value = "";
   gameState.value = "bet";
   resultText.value = "";
@@ -272,6 +288,8 @@ onMounted(() => {
   gdCoin.value = Number(localStorage.getItem("gdCoin")) || 0;
   goldCoin.value = Number(localStorage.getItem("goldCoin")) || 0;
   history.value = JSON.parse(localStorage.getItem("gdHistory")) || [];
+
+  initCards();
 
   const savedVersion = localStorage.getItem("app_version");
 
@@ -294,7 +312,7 @@ watch(history, (v) => localStorage.setItem("gdHistory", JSON.stringify(v)), {
 .game-container {
   max-width: 80%;
   width: 50%;
-  padding: 16px;
+  padding: 15px 0px;
   font-family: sans-serif;
   display: flex;
   flex-direction: column;
@@ -410,11 +428,9 @@ button:disabled {
   color: #ffb33f;
 }
 
-.card-area {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 12px;
-  justify-content: center;
+.card-area-wrapper {
+  position: relative;
+  margin-top: 20px;
 }
 
 .card-wrapper {
@@ -446,6 +462,55 @@ button:disabled {
   justify-content: center;
   font-weight: bold;
   backface-visibility: hidden;
+}
+
+/* overlay สีเทาคลุม */
+.card-lock {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.318);
+  backdrop-filter: blur(1px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  z-index: 10;
+  text-align: center;
+  padding: 2px;
+  animation: fadeIn 0.3s ease;
+}
+
+.card-lock p {
+  background: white;
+  color: #ff4400;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* การ์ด */
+.card-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* mobile: 2 ใบต่อแถว */
+.card-wrapper {
+  width: calc(50% - 12px);
+  max-width: 140px;
+}
+
+/* fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .front {
