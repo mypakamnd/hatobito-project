@@ -19,7 +19,7 @@
           <tr v-for="(item, index) in orders" :key="index" class="md:table-row">
             <!-- goods -->
             <td class="px-2 py-2 block md:table-cell" :data-label="'goods'">
-              <select v-model="item.product" @change="onProductChange(item)" class="w-full rounded px-2 py-1">
+              <select v-model="item.product" @change="onProductChange(item, $event)" class="w-full rounded px-2 py-1">
                 <option disabled value="">- Select Goods -</option>
                 <option v-for="product in products" :key="product.name" :value="product.name">
                   {{ product.name }}
@@ -128,7 +128,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, computed } from "vue";
+import { ref, watch, onMounted, computed, nextTick } from "vue";
 import SummarySection from "./SummarySection.vue";
 
 // If version mismatch, clear localStorage
@@ -202,7 +202,13 @@ const watashi = [
 function addOrder() {
   orders.value.push({ product: "", member1: "", quantity: 1, price: 0, goodsType: "", memberCount: 0 });
 }
-function onProductChange(item) {
+function onProductChange(item, event) {
+  const el = event.target;
+
+  nextTick(() => {
+    el.blur();
+  });
+
   const selected = products.find((p) => p.name === item.product);
 
   if (selected) {
