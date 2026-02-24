@@ -30,8 +30,8 @@
 
       <div class="row">
         <input type="number" v-model.number="betAmount" min="1" max="5" placeholder="วาง G-D! Coin" />
-        <small class="error" v-if="betError">{{ betError }}</small>
-        <button class="confirm-bet" @click="confirmBet">ยืนยันเดิมพัน</button>
+        <small class="error" v-if="betError">{{ betError }} </small>
+        <button class="confirm-bet" @click="confirmBet" :disabled="!canConfirmBet">ยืนยันเดิมพัน</button>
       </div>
     </div>
 
@@ -43,7 +43,7 @@
       <div class="card-area-wrapper">
         <!-- Overlay Lock -->
         <div v-if="!canPickCard" class="card-lock">
-          <p>กดยืนยันการเดิมพันหรือเล่นอีกครั้ง</p>
+          <p>กดเล่นอีกครั้งและยืนยันเดิมพันเพื่อเล่นเกม</p>
         </div>
 
         <div class="card-area">
@@ -69,7 +69,7 @@
 
     <!-- HISTORY -->
     <div class="history">
-      <label class="block font-semibold">• ประวัติ ( ลงเดิมพันทั้งหมด {{ totalBetCoins }} เหรียญ ) •</label>
+      <label class="block font-semibold mb-2">• ประวัติ ( ทั้งหมด {{ totalBetCoins }} G-D! Coin) •</label>
 
       <div v-for="(h, index) in history.slice(0, 100)" :key="index" class="history-item">เดิมพัน {{ h.bet }} coin → {{ h.card }} ({{ h.result }})</div>
     </div>
@@ -97,11 +97,11 @@ const topUpError = ref("");
 
 const gameState = ref("bet"); // bet | draw | result
 
-const mainDeck = ["WIN!!", "LOST!!"];
-const itemDeck = ["SUPER WIN!!", "PENALTY!!", "SHARE!!", "BOMB!!"];
+const mainDeck = ["WIN", "LOST"];
+const itemDeck = ["SUPER WIN", "PENALTY", "SHARE", "BOMB"];
 
 // If version mismatch, clear localStorage
-const APP_VERSION = "1.0.4";
+const APP_VERSION = "1.0.5";
 
 function shuffle(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
@@ -115,28 +115,13 @@ function formatPrice(price) {
 
 function validateTopUp() {
   if (!topUpAmount.value || topUpAmount.value <= 0) {
-    topUpError.value = "โปรดระบุเหรียญ G-D! มากกว่า 0";
+    topUpError.value = "โปรดระบุ G-D! Coin มากกว่า 0";
     return false;
   }
 
   topUpError.value = "";
   return true;
 }
-
-const isValidBet = computed(() => {
-  if (!betAmount.value) {
-    betError.value = "โปรดระบุเหรียญ G-D! มากกว่า 0";
-    return false;
-  }
-
-  if (betAmount.value > 5) {
-    betError.value = "ลงเดิมพันได้ไม่เกิน 5 เหรียญ";
-    return false;
-  }
-
-  betError.value = "";
-  return true;
-});
 
 /* ---------------- TOP UP ---------------- */
 
@@ -152,19 +137,32 @@ function handleTopUp() {
 /* ---------------- BET ---------------- */
 
 function confirmBet() {
-  if (!isValidBet.value) return;
+  betError.value = "";
 
-  if (gdCoin.value < betAmount.value) {
-    betError.value = "เหรียญไม่พอ";
+  if (!betAmount.value || betAmount.value <= 0) {
+    betError.value = "โปรดระบุ G-D! Coin มากกว่า 0";
+    return;
+  }
+
+  if (betAmount.value > gdCoin.value) {
+    betError.value = "G-D! Coin ไม่เพียงพอ";
     return;
   }
 
   currentBet.value = betAmount.value;
   gdCoin.value -= currentBet.value;
 
+  initCards(); // play and shuffle new cards
+
+  resultMessage.value = "";
+  resultText.value = "";
+
   gameState.value = "draw";
 }
 
+const canConfirmBet = computed(() => {
+  return gameState.value === "bet";
+});
 /* ---------------- DRAW ---------------- */
 
 const canPickCard = computed(() => {
@@ -193,32 +191,33 @@ function pickCard(cardObj) {
   let resultDetail = "";
 
   switch (card) {
-    case "WIN!!":
+    case "WIN":
       goldCoin.value += bet * 2;
       message = "WIN";
       resultDetail = `ได้รับ ${bet * 2} Gold Coin`;
       break;
 
-    case "LOST!!":
+    case "LOST":
       message = "LOST";
       resultDetail = "เสียเหรียญเดิมพันทั้งหมด";
       break;
 
-    case "SUPER WIN!!":
+    case "SUPER WIN":
       goldCoin.value += bet * 2;
       gdCoin.value += bet;
       message = "SUPER WIN";
       resultDetail = `ได้รับ ${bet * 2} Gold Coin + คืน ${bet} G-D! Coin`;
       break;
 
-    case "PENALTY!!":
+    case "PENALTY":
       const penalty = Math.ceil(bet / 2);
-      gdCoin.value -= penalty;
+      const refund = bet - penalty;
+      gdCoin.value += refund;
       message = "PENALTY";
-      resultDetail = `เสีย ${penalty} G-D! Coin ให้ Dealer`;
+      resultDetail = `เสีย ${penalty} G-D! Coin (ครึ่งนึงของเดิมพัน) ให้ Dealer`;
       break;
 
-    case "SHARE!!":
+    case "SHARE":
       const dealerShare = Math.ceil(bet / 2);
       const nextPlayerShare = bet - dealerShare;
 
@@ -226,7 +225,7 @@ function pickCard(cardObj) {
       resultDetail = `เสีย ${bet} G-D! Coin → Dealer ${dealerShare} / ผู้เล่นถัดไป ${nextPlayerShare} `;
       break;
 
-    case "BOMB!!":
+    case "BOMB":
       message = "BOMB";
       resultDetail = "เสียเหรียญเดิมพันทั้งหมด";
       break;
@@ -255,6 +254,7 @@ function resetGame() {
   resultMessage.value = "";
 
   initCards(); // play and shuffle new cards
+
   gameState.value = "bet";
 }
 
@@ -355,6 +355,11 @@ input {
   font-weight: 600;
 }
 
+input:focus,
+.gd-input:focus {
+  outline: none;
+}
+
 .gd-input {
   flex: 1;
   padding: 8px;
@@ -399,6 +404,8 @@ button,
 
 button:disabled {
   background: #ccc;
+  border: #ccc 2px solid;
+  cursor: not-allowed;
 }
 
 .primary-btn {
@@ -412,7 +419,8 @@ button:disabled {
 
 .error {
   color: #b10000;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .highlight {
@@ -464,7 +472,7 @@ button:disabled {
   backface-visibility: hidden;
 }
 
-/* overlay สีเทาคลุม */
+/* overlay */
 .card-lock {
   position: absolute;
   inset: 0;
@@ -489,15 +497,12 @@ button:disabled {
   font-size: 14px;
 }
 
-/* การ์ด */
 .card-area {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 12px;
   justify-content: center;
 }
-
-/* mobile: 2 ใบต่อแถว */
 .card-wrapper {
   width: calc(50% - 12px);
   max-width: 140px;
@@ -526,19 +531,20 @@ button:disabled {
 
 .result {
   text-align: center;
-  margin-top: 20px;
+  font-weight: 600;
 }
 
 .history {
-  margin-top: 14px;
-  font-size: 14px;
+  margin: 20px 0px;
+  font-size: 16px;
 }
 
 .history-item {
   border-bottom: 1px dashed #ccc;
   padding: 6px 0;
   text-align: left;
-  font-size: 12px;
+  font-size: 14px;
+  font-weight: 400;
   color: #134e8e;
 }
 
@@ -568,6 +574,7 @@ label {
 
 .result-text {
   font-size: 12px;
+  font-weight: 400;
 }
 
 .divider {
