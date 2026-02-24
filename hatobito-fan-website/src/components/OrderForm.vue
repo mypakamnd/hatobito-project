@@ -1,7 +1,7 @@
 <template>
   <div class="civil-order-form">
-    <h1 class="text-xl font-bold">Watashi No Katachi</h1>
-    <h1 class="text-xl font-bold mb-4">❄ Goods Form ❄</h1>
+    <h1 class="text-xl font-bold">G-D! GOODS</h1>
+    <h1 class="text-xl font-bold mb-4">♦ ORDER ♦</h1>
 
     <div class="overflow-x-auto">
       <table class="text-sm">
@@ -31,7 +31,7 @@
             <td class="desktop-only px-2 py-2" data-label="Member">
               <template v-if="requiresMemberCount(item.product) > 0">
                 <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
-                  <option disabled value="">- Select Member -</option>
+                  <option disabled value="">- Member -</option>
                   <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
                     {{ member.name }}
                   </option>
@@ -45,7 +45,7 @@
             <!-- member on mobile -->
             <td v-if="requiresMemberCount(item.product) > 0" class="mobile-only" data-label="Member">
               <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded">
-                <option disabled value="">- Select Member -</option>
+                <option disabled value="">- Member -</option>
                 <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
                   {{ member.name }}
                 </option>
@@ -101,11 +101,11 @@
 
     <div class="divider"></div>
 
-    <h1 class="text-xl font-bold">❄ Summary Section ❄</h1>
+    <h1 class="text-xl font-bold">♦ SUMMARY ♦</h1>
     <SummarySection :orders="orders" />
 
     <div class="div-a">
-      <a href="https://www.facebook.com/share/p/17sejQ4Jzr/" target="_blank" class="text-sm font-bold flex items-center gap-1">
+      <a href="https://www.facebook.com/share/p/1Awr7bB2A9/" target="_blank" class="text-sm font-bold flex items-center gap-1">
         Official Goods Sample<svg
           xmlns="http://www.w3.org/2000/svg"
           width="16"
@@ -132,7 +132,7 @@ import { ref, watch, onMounted, computed } from "vue";
 import SummarySection from "./SummarySection.vue";
 
 // If version mismatch, clear localStorage
-const APP_VERSION = "1.0.3";
+const APP_VERSION = "1.0.4";
 
 const grandTotal = computed(() => {
   return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);
@@ -169,15 +169,11 @@ watch(
 );
 
 const products = [
-  { name: "Costume Keychain", price: 250, memberCount: 0, memberType: "members", goodsType: "goods" },
-  { name: "Photoset", price: 250, memberCount: 0, memberType: "members", goodsType: "goods" },
-  { name: "Badge", price: 150, memberCount: 1, memberType: "watashi", goodsType: "goods" },
-  { name: "Member Standy Acrylic", price: 350, memberCount: 1, memberType: "watashi", goodsType: "goods" },
-  { name: "Member Poster", price: 350, memberCount: 1, memberType: "watashi", goodsType: "goods" },
-  { name: "Group Poster", price: 500, memberCount: 0, memberType: "members", goodsType: "goods" },
-  { name: "T-Shirt", price: 690, memberCount: 0, memberType: "members", goodsType: "goods" },
-  { name: "T-Shirt Special Edition", price: 690, memberCount: 0, memberType: "members", goodsType: "goods" },
-  { name: "Photo Card Collection Vol.3", price: 200, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "G-D! PHOTOSET", price: 250, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "G-D! MEMBER POSTER", price: 350, memberCount: 1, memberType: "members", goodsType: "goods" },
+  { name: "G-D! GROUP POSTER", price: 500, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "G-D! T-SHIRT", price: 590, memberCount: 0, memberType: "members", goodsType: "goods" },
+  { name: "G-D! COIN", price: 50, memberCount: 0, memberType: "members", goodsType: "goods" },
   { name: "Mini Snap", price: 300, memberCount: 1, memberType: "members", goodsType: "snap" },
   { name: "Snap", price: 400, memberCount: 1, memberType: "members", goodsType: "snap" },
 ];
@@ -185,20 +181,9 @@ const products = [
 const members = [
   { id: 1, name: "Airi" },
   { id: 2, name: "Beam" },
-  { id: 3, name: "Music" },
-  { id: 4, name: "Pear" },
   { id: 5, name: "Punnhyaz" },
   { id: 6, name: "Smild" },
   { id: 7, name: "Summer" },
-  { id: 8, name: "View" },
-  { id: 9, name: "Gorya" },
-  { id: 10, name: "Kana" },
-  { id: 11, name: "Chelsea" },
-  { id: 12, name: "Donut" },
-  { id: 13, name: "Elleelle" },
-  { id: 14, name: "Milin" },
-  { id: 15, name: "Nata" },
-  { id: 16, name: "Mobile" },
 ];
 
 const watashi = [
@@ -281,8 +266,8 @@ table {
 }
 
 td {
-  color: #70c0d8;
-  border: #70c0d8 1px solid;
+  color: #c00707;
+  border: #c00707 1px solid;
   font-weight: 600;
 }
 
@@ -292,42 +277,42 @@ tr {
 }
 
 th {
-  color: #70c0d8;
-  background: #e7f8ff;
-  border: #70c0d8 1px solid;
+  color: #134e8e;
+  background: #ffedd3;
+  border: #c00707 1px solid;
   font-size: 16px;
 }
 
 h1 {
-  color: #70c0d8;
+  color: #c00707;
   font-size: 28px;
 }
 
 .div-a {
   display: flex;
   justify-content: center;
-  color: #70c0d8;
+  color: #c00707;
   margin: 20px 0px;
 }
 
 .btn-click {
   color: #ffffff;
-  background: #70c0d8;
+  background: #c00707;
   padding: 10px 20px;
   margin-right: 10px;
   font-weight: bold;
   border-radius: 5px;
-  border: #70c0d8 2px solid;
+  border: #c00707 2px solid;
 }
 
 .btn-click:hover {
-  color: #70c0d8;
+  color: #c00707;
   background: #ffffff;
 }
 
 input {
   border: none;
-  border-bottom: 1px solid #b1d4e0;
+  border-bottom: 1px solid #c00707;
   outline: none;
 }
 
@@ -357,13 +342,13 @@ input[type="number"]::-webkit-inner-spin-button {
   border: none;
   font-size: 1.2rem;
   cursor: pointer;
-  color: #d87070;
+  color: #c00707;
 }
 
 .delete-icon-desktop {
   width: 18px;
   height: 18px;
-  fill: #d87070;
+  fill: #c00707;
   cursor: pointer;
 }
 
@@ -376,11 +361,11 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 select {
-  background-image: url("data:image/svg+xml;utf8,<svg fill='%2370c0d8' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23C00707' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 8px center;
   background-size: 24px;
-  padding-right: 30px;
+  padding-right: 10px;
 }
 
 .amount-button {
@@ -388,7 +373,7 @@ select {
 }
 
 .divider {
-  background: #70c0d8;
+  background: #c00707;
   width: 100%;
   height: 1px;
   margin: 40px 0;
@@ -414,7 +399,7 @@ select {
     width: 16px;
     height: 16px;
     bottom: 18px;
-    fill: #d87070;
+    fill: #c00707;
     cursor: pointer;
   }
 
@@ -433,11 +418,11 @@ select {
   td[data-label="goods"] select {
     width: 100%;
     text-align: center;
-    text-align-last: center; /* สำคัญมากบน iOS */
+    text-align-last: center; /* for iOS */
     padding: 0;
     margin: 0 auto;
     font-size: 16px;
-    color: #70c0d8;
+    color: #c00707;
 
     appearance: none;
     -webkit-appearance: none;
@@ -448,23 +433,22 @@ select {
 
   td[data-label="Summary"] {
     border: none;
-    color: #70c0d8;
+    color: #c00707;
   }
 
   td[data-label="amount"] {
     border: none;
-    color: #70c0d8;
+    color: #c00707;
   }
 
   td[data-label="Member"] {
-    color: #70c0d8;
+    color: #c00707;
     padding-left: 0 !important;
     text-align: center;
   }
 
   td[data-label="Member"] select {
     width: 100%;
-    padding-right: 2rem;
     text-align: end;
     text-align-last: end; /* for iOS */
   }
@@ -486,12 +470,12 @@ select {
     padding-bottom: 10px;
     text-align: center;
     border: none;
-    color: #70c0d8;
+    color: #c00707;
   }
 
   input {
     border: none;
-    border-bottom: 1px solid #70c0d8;
+    border-bottom: 1px solid #c00707;
     outline: none;
   }
 
@@ -514,7 +498,7 @@ select {
 
   tr {
     margin-bottom: 1rem;
-    border: 2px solid #70c0d8;
+    border: 2px solid #c00707;
     border-radius: 10px;
     padding: 10px;
     background-color: #ffffff;
@@ -529,7 +513,7 @@ select {
     padding-bottom: 10px;
     text-align: center;
     border: none;
-    border-bottom: 1px solid #70c0d8;
+    border-bottom: 1px solid #c00707;
   }
 
   td::before {
@@ -540,7 +524,7 @@ select {
     white-space: nowrap;
     content: attr(data-label);
     font-weight: bold;
-    color: #99daee;
+    color: #134e8e;
     text-transform: uppercase;
     width: 7rem;
   }

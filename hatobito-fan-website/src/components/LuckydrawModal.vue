@@ -3,7 +3,7 @@
     <div class="modal-content flex flex-col md:flex-row gap-4">
       <!-- Lucky Draw Card -->
       <div class="bg-white p-6 flex-1">
-        <h2 class="text-2xl font-bold text-center mb-6">❄ LUCKY DRAW ❄</h2>
+        <h2 class="text-2xl font-bold text-center mb-6">♦ LUCKY DRAW ♦</h2>
 
         <!-- Select Ticket -->
         <div class="mb-4">
@@ -42,7 +42,7 @@
 
       <!-- Point card -->
       <div class="bg-white p-6 space-y-6 flex-1">
-        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">❄ POINT ❄</h2>
+        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">♦ POINT ♦</h2>
 
         <!-- Total -->
         <div class="mb-4">
@@ -71,28 +71,6 @@
           <p class="tooltip-p">ทุกการชำระด้วย{{ selectedPayment }} = {{ luckyDrawFromPayment }} point</p>
         </div>
       </div>
-
-      <div class="divider"></div>
-
-      <!-- Postcard -->
-      <div class="bg-white p-6 space-y-6 flex-1">
-        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">❄ POSTCARD ❄</h2>
-
-        <!-- Total -->
-        <div class="mb-4">
-          <label class="block font-semibold mb-2"> ยอดรวม </label>
-          <div class="grand-total rounded-xl px-4 py-3 bg-gray-50 font-semibold">{{ formatPrice(grandTotal) }}</div>
-        </div>
-
-        <!-- Result Box -->
-        <div class="result-box rounded-xl text-center py-5 mb-0">
-          <p class="text-sm opacity-90 font-semibold">จำนวน Postcard ที่ได้รับ</p>
-          <p class="text-4xl font-bold">{{ postcardCal }}</p>
-        </div>
-        <div class="tooltip rounded-xl text-center py-5 px-5 mt-4">
-          <p class="tooltip-p">ⓘ ทุก ๆ การซื้อ 1,000 บาทขึ้นไป สุ่มรับ Postcard 1 ใบ (มีเมมเบอร์ละ 1 แบบ / แบบกลุ่ม 1 แบบ รวมทั้งหมด 10 แบบ)</p>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -119,7 +97,7 @@ const paymentTypes = [
 const selectedPayment = ref("");
 
 // If version mismatch, clear localStorage
-const APP_VERSION = "1.0.3";
+const APP_VERSION = "1.0.4";
 
 // load localStorage on mounted
 onMounted(() => {
@@ -169,9 +147,8 @@ function formatPrice(price) {
 
 const tickets = [
   { name: "NORMAL TICKET (+ 0)", luckyPerTicket: 0 },
-  { name: "WINTER TICKET (+ 2)", luckyPerTicket: 2 },
+  { name: "GIRLS KNOW TICKET (+ 2)", luckyPerTicket: 2 },
   { name: "S TICKET (+ 3)", luckyPerTicket: 3 },
-  { name: "SS TICKET (+ 5)", luckyPerTicket: 5 },
 ];
 
 const selectedTicket = ref("");
@@ -291,7 +268,7 @@ const totalLuckyDraw = computed(() => {
 }
 
 select {
-  background-image: url("data:image/svg+xml;utf8,<svg fill='%2370c0d8' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23c00707' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 8px center;
   background-size: 24px;
@@ -300,9 +277,9 @@ select {
 
 select {
   text-align: center;
-  color: #70c0d8;
-  background-color: #f8fdff;
-  border: #70c0d8 1px solid;
+  color: #c00707;
+  background-color: #ffefef;
+  border: #c00707 1px solid;
   appearance: auto;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -311,9 +288,9 @@ select {
 
 .input-amount {
   text-align: center;
-  color: #70c0d8;
-  background-color: #f8fdff;
-  border: #70c0d8 1px solid;
+  color: #c00707;
+  background-color: #ffefef;
+  border: #c00707 1px solid;
   appearance: auto;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -335,38 +312,37 @@ input {
 }
 
 h2 {
-  color: #70c0d8;
+  color: #c00707;
 }
 
 label {
-  color: #1399c2;
+  color: #134e8e;
 }
 
 .grand-total {
-  color: #70c0d8;
-  background-color: #f8fdff;
-  border: #70c0d8 1px solid;
+  color: #c00707;
+  background-color: #ffefef;
+  border: #c00707 1px solid;
 }
 .result-box {
   color: #ffffff;
-  background: #70c0d8;
-  background: linear-gradient(90deg, rgba(112, 192, 216, 1) 0%, rgba(140, 230, 255, 1) 100%, rgba(112, 224, 255, 1) 50%);
+  background: #c00707;
+  background: linear-gradient(90deg, rgba(192, 7, 7, 1) 39%, rgba(19, 78, 142, 1) 100%);
 }
 
 .tooltip {
-  background: #ebf9ff;
-  /* border: #1399c2 1px solid; */
+  background: #ffedd3;
 }
 
 .tooltip-p {
-  color: #70c0d8;
+  color: #c00707;
   font-weight: 400;
   font-size: 14px;
 }
 
 .divider {
   width: 1px;
-  background: #70c0d8;
+  background: #c00707;
   margin: 0 20px;
   flex-shrink: 0;
 }

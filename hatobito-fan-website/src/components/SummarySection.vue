@@ -49,8 +49,8 @@
           <td class="calculate-td-right">{{ formatPrice(goodsTotal) }}</td>
         </tr>
         <tr class="summary-tr">
-          <td class="calculate-td-left" style="color: #d87070">Goods Discount</td>
-          <td class="calculate-td-right" style="color: #d87070">- {{ formatPrice(goodsDiscount) }}</td>
+          <td class="calculate-td-left" style="color: #c00707">Goods Discount</td>
+          <td class="calculate-td-right" style="color: #c00707">- {{ formatPrice(goodsDiscount) }}</td>
         </tr>
       </tbody>
     </table>
@@ -67,13 +67,13 @@
     </table>
 
     <div class="tooltip rounded-xl text-center py-5 px-5 mt-4">
-      <p class="tooltip-p">ⓘ ส่วนลดจาก Tier ใช้ได้เฉพาะสินค้าประเภท Goods เท่านั้น Snap / Mini Snap จะไม่ได้รับส่วนลด</p>
+      <p class="tooltip-p">ⓘ ส่วนลดจาก Tier ใช้ได้เฉพาะสินค้าประเภท Goods เท่านั้น Snap จะไม่ได้รับส่วนลด</p>
     </div>
 
     <div class="group-button">
-      <button @click="openWithTier" class="btn-cal-with-tier">คำนวณด้วย tier</button>
+      <!-- <button @click="openWithTier" class="btn-cal-with-tier">คำนวณด้วย tier</button> -->
 
-      <button @click="openWithoutTier" class="btn-cal-without-tier">คำนวนแบบไม่มี tier</button>
+      <button @click="openWithoutTier" class="btn-cal-with-tier">Point and Lucky Draw</button>
     </div>
 
     <LuckydrawModal :show="showModalLuckyDraw" :grand-total="modalTotal" @close="showModalLuckyDraw = false" />
@@ -93,7 +93,7 @@ const showModalLuckyDraw = ref(false);
 const modalTotal = ref(0);
 
 // If version mismatch, clear localStorage
-const APP_VERSION = "1.0.3";
+const APP_VERSION = "1.0.4";
 
 onMounted(() => {
   const savedVersion = localStorage.getItem("app_version");
@@ -176,15 +176,15 @@ const formatPrice = (value) => {
 <style scoped>
 .btn-cal-with-tier {
   color: #ffffff;
-  background: #70c0d8;
+  background: #c00707;
   padding: 10px 20px;
   font-weight: bold;
   border-radius: 5px;
-  border: #70c0d8 2px solid;
+  border: #c00707 2px solid;
 }
 
 .btn-cal-with-tier:hover {
-  color: #70c0d8;
+  color: #c00707;
   background: #ffffff;
 }
 
@@ -216,8 +216,8 @@ table {
 }
 
 td {
-  color: #70c0d8;
-  border: #70c0d8 1px solid;
+  color: #c00707;
+  border: #c00707 1px solid;
   font-weight: 600;
   font-size: 14px;
   padding: 8px;
@@ -226,13 +226,13 @@ td {
 
 tr {
   color: #ffffff;
-  border: #370079 1px solid;
+  border: #c00707 1px solid;
 }
 
 th {
-  color: #70c0d8;
-  background: #e7f8ff;
-  border: #70c0d8 1px solid;
+  color: #134e8e;
+  background: #ffedd3;
+  border: #c00707 1px solid;
   font-size: 14px;
 }
 
@@ -244,7 +244,7 @@ th {
 
 .member {
   white-space: nowrap;
-  color: #2a98b9;
+  color: #134e8e;
 }
 
 span {
@@ -256,7 +256,7 @@ span {
 }
 
 select {
-  background-image: url("data:image/svg+xml;utf8,<svg fill='%2370c0d8' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23C00707' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 8px center;
   background-size: 24px;
@@ -265,10 +265,10 @@ select {
 
 select {
   text-align: center;
-  color: #70c0d8;
+  color: #c00707;
   width: 30%;
-  background-color: #f8fdff;
-  border: #70c0d8 1px solid;
+  background-color: #ffefef;
+  border: #c00707 1px solid;
   appearance: auto;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -287,11 +287,13 @@ select {
 .summary-td-right,
 .calculate-td-right {
   text-align: right;
+  color: #134e8e;
 }
 
 .summary-td-left,
 .calculate-td-left {
   text-align: left;
+  color: #134e8e;
 }
 
 .calculate-td-left,
@@ -303,16 +305,16 @@ select {
 
 .dashed-custom {
   height: 2px;
-  background: repeating-linear-gradient(to right, #94d7eb 0px, #94d7eb 8px, transparent 8px, transparent 16px);
+  background: repeating-linear-gradient(to right, #c00707 0px, #c00707 8px, transparent 8px, transparent 16px);
 }
 
 .tooltip {
-  background: #ebf9ff;
+  background: #ffedd3;
   /* border: #1399c2 1px solid; */
 }
 
 .tooltip-p {
-  color: #70c0d8;
+  color: #c00707;
   font-weight: 400;
   font-size: 14px;
 }
