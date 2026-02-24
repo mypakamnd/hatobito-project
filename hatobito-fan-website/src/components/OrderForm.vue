@@ -20,7 +20,7 @@
             <!-- goods -->
             <td class="px-2 py-2 block md:table-cell" :data-label="'goods'">
               <select v-model="item.product" @change="onProductChange(item, $event)" class="w-full rounded px-2 py-1">
-                <option disabled value="">- Select Goods -</option>
+                <option disabled value="">- SELECT GOODS -</option>
                 <option v-for="product in products" :key="product.name" :value="product.name">
                   {{ product.name }}
                 </option>
@@ -31,7 +31,7 @@
             <td class="desktop-only px-2 py-2" data-label="Member">
               <template v-if="requiresMemberCount(item.product) > 0">
                 <select v-model="item.member1" @change="(e) => e.target.blur()" class="w-full rounded px-2 py-1 text-center">
-                  <option disabled value="">- Member -</option>
+                  <option disabled value="">- MEMBER -</option>
                   <option v-for="member in getMemberList(item.product)" :key="member.id" :value="member.name">
                     {{ member.name }}
                   </option>
@@ -132,7 +132,7 @@ import { ref, watch, onMounted, computed, nextTick } from "vue";
 import SummarySection from "./SummarySection.vue";
 
 // If version mismatch, clear localStorage
-const APP_VERSION = "1.0.4";
+const APP_VERSION = "1.0.5";
 
 const grandTotal = computed(() => {
   return orders.value.reduce((sum, item) => sum + getTotalPrice(item), 0);
@@ -173,17 +173,17 @@ const products = [
   { name: "G-D! MEMBER POSTER", price: 350, memberCount: 1, memberType: "members", goodsType: "goods" },
   { name: "G-D! GROUP POSTER", price: 500, memberCount: 0, memberType: "members", goodsType: "goods" },
   { name: "G-D! T-SHIRT", price: 590, memberCount: 0, memberType: "members", goodsType: "goods" },
-  { name: "G-D! COIN", price: 50, memberCount: 0, memberType: "members", goodsType: "goods" },
-  { name: "Mini Snap", price: 300, memberCount: 1, memberType: "members", goodsType: "snap" },
-  { name: "Snap", price: 400, memberCount: 1, memberType: "members", goodsType: "snap" },
+  { name: "G-D! COIN", price: 50, memberCount: 0, memberType: "members", goodsType: "gdcoin" },
+  { name: "MINI SNAP", price: 300, memberCount: 1, memberType: "members", goodsType: "snap" },
+  { name: "SNAP", price: 400, memberCount: 1, memberType: "members", goodsType: "snap" },
 ];
 
 const members = [
-  { id: 1, name: "Airi" },
-  { id: 2, name: "Beam" },
-  { id: 5, name: "Punnhyaz" },
-  { id: 6, name: "Smild" },
-  { id: 7, name: "Summer" },
+  { id: 1, name: "AIRI" },
+  { id: 2, name: "BEAM" },
+  { id: 5, name: "PUNNHYAZ" },
+  { id: 6, name: "SMILD" },
+  { id: 7, name: "SUMMER" },
 ];
 
 const watashi = [

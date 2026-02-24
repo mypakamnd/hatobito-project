@@ -18,7 +18,7 @@
       </thead>
 
       <tbody>
-        <tr v-for="(item, index) in orders" :key="index">
+        <tr v-for="(item, index) in sortedOrders" :key="index">
           <td class="td-goods">
             {{ item.product }}
             <template v-if="item.memberCount > 0">
@@ -41,11 +41,15 @@
     <table class="summary-table">
       <tbody class="summary-tbody">
         <tr class="summary-tr">
-          <td class="calculate-td-left">Mini Snap / Snap Total</td>
+          <td class="calculate-td-left">MINI SNAP / SNAP TOTAL</td>
           <td class="calculate-td-right">{{ formatPrice(snapTotal) }}</td>
         </tr>
         <tr class="summary-tr">
-          <td class="calculate-td-left">Goods Total</td>
+          <td class="calculate-td-left">G-D! COIN TOTAL</td>
+          <td class="calculate-td-right">{{ formatPrice(gdCoinTotal) }}</td>
+        </tr>
+        <tr class="summary-tr">
+          <td class="calculate-td-left">GOODS TOTAL</td>
           <td class="calculate-td-right">{{ formatPrice(goodsTotal) }}</td>
         </tr>
         <tr class="summary-tr">
@@ -67,7 +71,7 @@
     </table>
 
     <div class="tooltip rounded-xl text-center py-5 px-5 mt-4">
-      <p class="tooltip-p">ⓘ ส่วนลดจาก Tier ใช้ได้เฉพาะสินค้าประเภท Goods เท่านั้น Snap จะไม่ได้รับส่วนลด</p>
+      <p class="tooltip-p">ⓘ แจ้งพนักงานหากต้องการรับส่วนลด ส่วนลดจาก Tier ใช้ได้เฉพาะสินค้าประเภท Goods เท่านั้น SNAP และ G-D! Coin จะไม่ได้รับส่วนลด</p>
     </div>
 
     <div class="group-button">
@@ -148,13 +152,22 @@ const snapTotal = computed(() =>
   }, 0)
 );
 
+const gdCoinTotal = computed(() =>
+  props.orders.reduce((sum, item) => {
+    if (item.goodsType === "gdcoin") {
+      return sum + item.price * item.quantity;
+    }
+    return sum;
+  }, 0)
+);
+
 const goodsDiscount = computed(() => {
   const percent = selectedTierObj.value?.discount || 0;
   return goodsTotal.value * (percent / 100);
 });
 
 const finalTotal = computed(() => {
-  return goodsTotal.value - goodsDiscount.value + snapTotal.value;
+  return goodsTotal.value - goodsDiscount.value + snapTotal.value + gdCoinTotal.value;
 });
 
 function openWithTier() {
@@ -166,6 +179,24 @@ function openWithoutTier() {
   modalTotal.value = total.value;
   showModalLuckyDraw.value = true;
 }
+
+const sortedOrders = computed(() => {
+  const getOrderRank = (item) => {
+    if (item.goodsType === "goods") return 1;
+    if (item.goodsType === "gdcoin") return 2;
+
+    if (item.goodsType === "snap") {
+      if (item.product === "SNAP") return 3;
+      if (item.product === "MINI SNAP") return 4;
+    }
+
+    return 99;
+  };
+
+  return [...props.orders].sort((a, b) => {
+    return getOrderRank(a) - getOrderRank(b);
+  });
+});
 
 const formatPrice = (value) => {
   if (!value && value !== 0) return "0";
