@@ -172,6 +172,7 @@ function validateTopUp() {
     topUpError.value = "Please specify a G-D! Coin amount greater than 0";
     return false;
   }
+
   topUpError.value = "";
   return true;
 }
@@ -194,6 +195,11 @@ function confirmBet() {
   if (betAmount.value > gdCoin.value) {
     betError.value = "Insufficient G-D! Coin";
     return;
+  }
+
+  if (!betAmount.value || betAmount.value > 5) {
+    betError.value = "G-D coins must not exceed 5";
+    return false;
   }
 
   currentBet.value = betAmount.value;
