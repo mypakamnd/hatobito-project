@@ -86,7 +86,6 @@ const activeTab = computed(() => route.path);
   overflow: hidden;
 }
 
-/* ตัวแถบขาวที่เลื่อน */
 .tab-indicator {
   position: absolute;
   top: 5px;

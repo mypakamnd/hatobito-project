@@ -5,70 +5,65 @@
       <div class="bg-white p-6 flex-1">
         <h2 class="text-2xl font-bold text-center mb-6">♦ LUCKY DRAW ♦</h2>
 
-        <!-- Select Ticket -->
         <div class="mb-4">
-          <label class="block font-semibold mb-2"> เลือกบัตรเข้างาน </label>
-
-          <select class="w-full rounded-xl px-4 py-3 bg-gray-50 font-semibold appearance-none" v-model="selectedTicket" @change="(e) => e.target.blur()">
-            <option disabled value="">- เลือกรายการบัตร -</option>
+          <label class="block font-semibold mb-2">SELECT TICKET</label>
+          <select v-model="selectedTicket" @change="(e) => e.target.blur()" class="w-full rounded-xl px-4 py-3 font-semibold">
+            <option disabled value="">- SELECT TICKET -</option>
             <option v-for="ticket in tickets" :key="ticket.name" :value="ticket.name">
               {{ ticket.name }}
             </option>
           </select>
         </div>
 
-        <!-- Amount -->
         <div class="mb-4">
-          <label class="block font-semibold mb-2"> จำนวนบัตร </label>
-          <div class="input-amount w-full rounded-xl px-4 py-3 bg-gray-50 font-semibold">
+          <label class="block font-semibold mb-2">TICKET AMOUNT</label>
+          <div class="input-amount w-full rounded-xl px-4 py-3 font-semibold">
             <button type="button" class="amount-button" @click="if (ticketCount > 1) ticketCount--;">-</button>
             <input type="number" min="1" v-model.number="ticketCount" />
             <button type="button" class="amount-button" @click="ticketCount++">+</button>
           </div>
         </div>
 
-        <!-- Result Box -->
         <div class="result-box rounded-xl text-center py-5">
-          <p class="text-sm opacity-90 font-semibold">ผลลัพธ์ Lucky Draw ที่ได้รับ</p>
-          <p class="text-4xl font-bold">{{ totalLuckyDraw }}</p>
+          <p class="text-sm opacity-90 font-semibold">LUCKY DRAW CALCULATE</p>
+          <p class="text-4xl font-bold mt-2 mb-2">{{ totalLuckyDraw }}</p>
         </div>
-        <div class="tooltip rounded-xl text-center py-5 mt-4">
-          <p class="tooltip-p">ⓘ Goods {{ formatPrice(grandTotal) }} / 600 = {{ luckyDrawFromTotal }} Lucky Draw</p>
-          <p class="tooltip-p">{{ selectedTicket }} x {{ ticketCount }} = {{ luckyDrawFromTicket }} Lucky Draw</p>
+
+        <div class="notice rounded-xl text-center py-5 mt-4">
+          <p class="notice-p">ⓘ Goods {{ formatPrice(grandTotal) }} / 600 = {{ luckyDrawFromTotal }} Lucky Draw</p>
+          <p class="notice-p">{{ selectedTicket }} x {{ ticketCount }} = {{ luckyDrawFromTicket }} Lucky Draw</p>
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <!-- Point card -->
+      <!-- Point Card -->
       <div class="bg-white p-6 space-y-6 flex-1">
-        <h2 class="text-2xl font-bold text-red-600 text-center mb-6">♦ POINT ♦</h2>
+        <h2 class="text-2xl font-bold text-center mb-6">♦ POINT ♦</h2>
 
-        <!-- Total -->
         <div class="mb-4">
-          <label class="block font-semibold mb-2"> ยอดรวม </label>
-          <div class="grand-total rounded-xl px-4 py-3 bg-gray-50 font-semibold">{{ formatPrice(grandTotal) }}</div>
+          <label class="block font-semibold mb-2">ORDER TOTAL</label>
+          <div class="display-box rounded-xl px-4 py-3 font-semibold">{{ formatPrice(grandTotal) }}</div>
         </div>
 
-        <!-- Payment Method -->
         <div class="mb-4">
-          <label class="block font-semibold mb-2"> รูปแบบการชำระเงิน </label>
-          <select class="w-full rounded-xl px-4 py-3 bg-gray-50 font-semibold appearance-none" v-model="selectedPayment" @change="(e) => e.target.blur()">
-            <option disabled value="">- เลือกรูปแบบการชำระเงิน -</option>
+          <label class="block font-semibold mb-2">PAYMENT TYPE</label>
+          <select v-model="selectedPayment" @change="(e) => e.target.blur()" class="w-full rounded-xl px-4 py-3 font-semibold">
+            <option disabled value="">- PAYMENT TYPE -</option>
             <option v-for="pay in paymentTypes" :key="pay.name" :value="pay.name">
               {{ pay.name }}
             </option>
           </select>
         </div>
 
-        <!-- Result Box -->
-        <div class="result-box rounded-xl text-center py-5 mb-0">
-          <p class="text-sm opacity-90 font-semibold">จำนวน Point ที่ได้รับ</p>
-          <p class="text-4xl font-bold">{{ luckyDrawFromPayment }}</p>
+        <div class="result-box rounded-xl text-center py-5">
+          <p class="text-sm opacity-90 font-semibold">POINT CALCULATE</p>
+          <p class="text-4xl font-bold mt-2 mb-2">{{ luckyDrawFromPayment }}</p>
         </div>
-        <div class="tooltip rounded-xl text-center py-5 px-5 mt-4">
-          <p class="tooltip-p">ⓘ Goods {{ formatPrice(grandTotal) }} / 600 = {{ baseLuckyDraw }} point</p>
-          <p class="tooltip-p">ทุกการชำระด้วย{{ selectedPayment }} = {{ luckyDrawFromPayment }} point</p>
+
+        <div class="notice rounded-xl text-center py-5 px-5 mt-4">
+          <p class="notice-p">ⓘ Goods {{ formatPrice(grandTotal) }} / 600 = {{ baseLuckyDraw }} point</p>
+          <p class="notice-p">ทุกการชำระด้วย{{ selectedPayment }} = {{ luckyDrawFromPayment }} point</p>
         </div>
       </div>
     </div>
@@ -76,74 +71,24 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed, ref } from "vue";
-import { watch, onMounted } from "vue";
+import { ref, computed, watch, onMounted } from "vue";
 
+// ── Props & Emits ──────────────────────────────────────────
 const props = defineProps({
   show: Boolean,
-  grandTotal: {
-    type: Number,
-    default: 0,
-  },
+  grandTotal: { type: Number, default: 0 },
 });
 
-// payment type
-const paymentTypes = [
-  { name: "เงินสด x 3", multiplier: 3 },
-  { name: "QR Code x 1", multiplier: 1 },
-  { name: "บัตรเครดิต x 1", multiplier: 1 },
-];
-
-const selectedPayment = ref("");
-
-// If version mismatch, clear localStorage
-const APP_VERSION = "1.0.4";
-
-// load localStorage on mounted
-onMounted(() => {
-  const savedVersion = localStorage.getItem("app_version");
-
-  if (savedVersion !== APP_VERSION) {
-    // If version mismatch, clear localStorage
-    localStorage.clear();
-
-    localStorage.setItem("app_version", APP_VERSION);
-  }
-
-  const saved = localStorage.getItem("selectedPayment");
-  if (saved) {
-    selectedPayment.value = saved;
-  }
-});
-
-// save selected payment type to localStorage
-watch(selectedPayment, (newVal) => {
-  if (newVal) {
-    localStorage.setItem("selectedPayment", newVal);
-  }
-});
-
-// select payment type object
-const selectedPaymentObj = computed(() => paymentTypes.find((p) => p.name === selectedPayment.value));
-
-// point calculation
-const luckyDrawFromPayment = computed(() => {
-  const base = Math.floor((props.grandTotal || 0) / 600);
-  return selectedPaymentObj.value ? base * selectedPaymentObj.value.multiplier : 0;
-});
-
-const baseLuckyDraw = computed(() => {
-  return Math.floor((props.grandTotal || 0) / 600);
-});
-
-const postcardCal = computed(() => {
-  return Math.floor((props.grandTotal || 0) / 1000);
-});
-
-// calculate total price format
-function formatPrice(price) {
-  return `${price.toLocaleString()} บาท`;
+const emit = defineEmits(["close"]);
+function close() {
+  emit("close");
 }
+
+// ── Constants ──────────────────────────────────────────────
+const APP_VERSION = "1.0.6";
+const STORAGE_KEY_VERSION = "app_version";
+const STORAGE_KEY_PAYMENT = "selectedPayment";
+const STORAGE_KEY_TICKET = "luckyDrawTicket";
 
 const tickets = [
   { name: "NORMAL TICKET (+ 0)", luckyPerTicket: 0 },
@@ -151,61 +96,82 @@ const tickets = [
   { name: "S TICKET (+ 3)", luckyPerTicket: 3 },
 ];
 
+const paymentTypes = [
+  { name: "เงินสด x 3", multiplier: 3 },
+  { name: "QR Code x 1", multiplier: 1 },
+  { name: "บัตรเครดิต x 1", multiplier: 1 },
+];
+
+// ── State ──────────────────────────────────────────────────
 const selectedTicket = ref("");
 const ticketCount = ref(0);
+const selectedPayment = ref("");
 
-const selectedTicketObj = computed(() => tickets.find((t) => t.name === selectedTicket.value));
+// ── Lifecycle ──────────────────────────────────────────────
+onMounted(() => {
+  const savedVersion = localStorage.getItem(STORAGE_KEY_VERSION);
+  if (savedVersion !== APP_VERSION) {
+    localStorage.removeItem(STORAGE_KEY_PAYMENT);
+    localStorage.removeItem(STORAGE_KEY_TICKET);
+    localStorage.setItem(STORAGE_KEY_VERSION, APP_VERSION);
+  }
+
+  const savedPayment = localStorage.getItem(STORAGE_KEY_PAYMENT);
+  if (savedPayment) selectedPayment.value = savedPayment;
+
+  const savedTicket = localStorage.getItem(STORAGE_KEY_TICKET);
+  if (savedTicket) {
+    try {
+      const parsed = JSON.parse(savedTicket);
+      selectedTicket.value = parsed.ticketName || "";
+      ticketCount.value = parsed.ticketCount || 0;
+    } catch (e) {
+      console.error("Failed to load luckyDrawTicket from localStorage:", e);
+    }
+  }
+});
+
+// ── Watchers ───────────────────────────────────────────────
+watch(selectedPayment, (val) => {
+  if (val) localStorage.setItem(STORAGE_KEY_PAYMENT, val);
+});
 
 watch(
-  [selectedTicketObj, ticketCount],
+  [() => tickets.find((t) => t.name === selectedTicket.value), ticketCount],
   ([ticket, count]) => {
     if (ticket) {
-      localStorage.setItem(
-        "luckyDrawTicket",
-        JSON.stringify({
-          ticketName: ticket.name,
-          ticketCount: count,
-        })
-      );
+      localStorage.setItem(STORAGE_KEY_TICKET, JSON.stringify({ ticketName: ticket.name, ticketCount: count }));
     }
   },
   { immediate: true }
 );
 
-onMounted(() => {
-  const saved = localStorage.getItem("luckyDrawTicket");
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      selectedTicket.value = parsed.ticketName || "";
-      ticketCount.value = parsed.ticketCount || 0;
-    } catch (e) {
-      console.error("load local storage failed.", e);
-    }
-  }
-});
-
-const emit = defineEmits(["close"]);
-
-function close() {
-  emit("close");
+// ── Helpers ────────────────────────────────────────────────
+function baseDrawCount() {
+  return Math.floor((props.grandTotal || 0) / 600);
 }
 
+function formatPrice(price) {
+  return `${price.toLocaleString()} บาท`;
+}
+
+// ── Computed ───────────────────────────────────────────────
+const selectedPaymentObj = computed(() => paymentTypes.find((p) => p.name === selectedPayment.value));
+
+const baseLuckyDraw = computed(() => baseDrawCount());
+const luckyDrawFromTotal = computed(() => baseDrawCount());
 const luckyDrawFromTicket = computed(() => {
   const ticket = tickets.find((t) => t.name === selectedTicket.value);
   return ticket ? ticket.luckyPerTicket * ticketCount.value : 0;
 });
-
-const luckyDrawFromTotal = computed(() => {
-  return Math.floor((props.grandTotal || 0) / 600);
+const luckyDrawFromPayment = computed(() => {
+  return selectedPaymentObj.value ? baseLuckyDraw.value * selectedPaymentObj.value.multiplier : 0;
 });
-
-const totalLuckyDraw = computed(() => {
-  return luckyDrawFromTicket.value + luckyDrawFromTotal.value;
-});
+const totalLuckyDraw = computed(() => luckyDrawFromTicket.value + luckyDrawFromTotal.value);
 </script>
 
 <style scoped>
+/* ── Modal ───────────────────────────────────────────────── */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -217,7 +183,6 @@ const totalLuckyDraw = computed(() => {
 }
 
 .modal-content {
-  gap: 8px;
   background: white;
   border-radius: 16px;
   padding: 1.5rem;
@@ -226,48 +191,23 @@ const totalLuckyDraw = computed(() => {
   overflow-y: auto;
 }
 
-.modal-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: transparent;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: red;
+/* ── Typography ──────────────────────────────────────────── */
+h2 {
+  color: #c00707;
+}
+label {
+  color: #000000;
 }
 
-.modal-title {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-}
-
-.draw-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 1rem;
-}
-
-.draw-table th,
-.draw-table td {
-  padding: 0.5rem;
-  text-align: center;
-}
-
-.draw-table select,
-.draw-table input {
-  width: 100%;
-  padding: 4px;
-}
-
-.total {
-  font-weight: bold;
-  font-size: 1.2rem;
-  text-align: right;
-}
-
+/* ── Form Controls ───────────────────────────────────────── */
 select {
+  color: #c00707;
+  background-color: #ffefef;
+  border: 1px solid #c00707;
+  text-align: center;
+  text-align-last: center;
+  appearance: none;
+  -webkit-appearance: none;
   background-image: url("data:image/svg+xml;utf8,<svg fill='%23c00707' height='30' viewBox='0 0 24 24' width='30' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 8px center;
@@ -275,28 +215,28 @@ select {
   padding-right: 30px;
 }
 
-select {
-  text-align: center;
-  color: #c00707;
-  background-color: #ffefef;
-  border: #c00707 1px solid;
-  appearance: auto;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  text-align-last: center; /* สำคัญมากบน iOS */
+select:focus {
+  outline: none;
 }
 
 .input-amount {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   color: #c00707;
   background-color: #ffefef;
-  border: #c00707 1px solid;
-  appearance: auto;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  text-align-last: center; /* สำคัญมากบน iOS */
+  border: 1px solid #c00707;
+  text-align: center;
 }
 
+input[type="number"] {
+  width: 60px;
+  text-align: center;
+  border: none;
+  outline: none;
+  background: transparent;
+}
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -307,39 +247,29 @@ input[type="number"]::-webkit-inner-spin-button {
   font-size: 20px;
 }
 
-input {
-  width: 60px;
-}
-
-h2 {
-  color: #c00707;
-}
-
-label {
-  color: #134e8e;
-}
-
-.grand-total {
+/* ── Boxes ───────────────────────────────────────────────── */
+.display-box {
   color: #c00707;
   background-color: #ffefef;
-  border: #c00707 1px solid;
+  border: 1px solid #c00707;
 }
+
 .result-box {
-  color: #ffffff;
+  color: #fff;
   background: #c00707;
-  background: linear-gradient(90deg, rgba(192, 7, 7, 1) 39%, rgba(19, 78, 142, 1) 100%);
+  background: linear-gradient(90deg, rgba(192, 7, 7, 1) 40%, rgba(0, 0, 0, 1) 100%);
 }
 
-.tooltip {
-  background: #ffedd3;
+.notice {
+  background: #ffefef;
 }
-
-.tooltip-p {
+.notice-p {
   color: #c00707;
   font-weight: 400;
   font-size: 14px;
 }
 
+/* ── Divider ─────────────────────────────────────────────── */
 .divider {
   width: 1px;
   background: #c00707;
@@ -347,6 +277,7 @@ label {
   flex-shrink: 0;
 }
 
+/* ── Mobile ──────────────────────────────────────────────── */
 @media (max-width: 767px) {
   .modal-content {
     flex-direction: column;
@@ -354,21 +285,12 @@ label {
     min-width: 95%;
     max-width: 90%;
   }
-
-  .draw-table th,
-  .draw-table td {
-    padding: 8px 8px;
-    text-align: center;
-  }
-
   .divider {
     width: 100%;
     height: 1px;
     margin: 20px 0;
-    flex-shrink: 0;
   }
-
-  .tooltip-p {
+  .notice-p {
     font-size: 12px;
   }
 }
